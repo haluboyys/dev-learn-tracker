@@ -55,7 +55,7 @@ function getLocalDevDb() {
 	return localDbInstance;
 }
 
-export function getDb(platform?: App.Platform) {
+export function getDb(platform?: Readonly<App.Platform> | App.Platform) {
 	if (platform?.env?.DB) {
 		return drizzleD1(platform.env.DB, { schema });
 	}

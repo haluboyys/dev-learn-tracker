@@ -188,13 +188,7 @@
 					<textarea
 						name="notes"
 						bind:value={notes}
-						placeholder="Tulis catatan di sini menggunakan Markdown...
-Contoh code block:
-```typescript
-const greet = (name: string): string => {
-  return `Hello ${name}!`;
-};
-```"
+						placeholder="Tulis catatan di sini menggunakan Markdown... (Contoh: ```typescript ... ```)"
 						class="flex-1 w-full p-4 font-mono text-sm leading-relaxed bg-transparent text-black dark:text-white outline-none resize-none"
 					></textarea>
 				</div>

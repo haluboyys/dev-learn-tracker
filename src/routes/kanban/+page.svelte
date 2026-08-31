@@ -6,7 +6,7 @@
 		FolderGit2,
 		ExternalLink,
 		FileText,
-		Github,
+		GitBranch,
 		ArrowRight,
 		ArrowLeft,
 		Filter
@@ -226,7 +226,7 @@
 												rel="noopener noreferrer"
 												class="text-[11px] font-bold text-black dark:text-white hover:underline flex items-center gap-1"
 											>
-												<Github class="w-3 h-3" />
+												<GitBranch class="w-3 h-3" />
 												Repo
 											</a>
 										{/if}

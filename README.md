@@ -1,42 +1,74 @@
-# sv
+# ⚡ Dev Learning Hub (Neo-Brutalist Personal Tracker)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Personal programming learning tracker designed with a **Neo-Brutalism aesthetic (Dark Mode support)**, built using **SvelteKit + TypeScript**, styled with **Tailwind CSS v4**, and backed by **Cloudflare D1 (SQLite)**.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🚀 Features
 
-```sh
-# create a new project
-npx sv create my-app
+1. **Access Code Authentication**: Fast single access code gate without needing third-party auth providers.
+2. **Materials & Curriculum Tracker**: Organizes topics, learning items, external resource URLs, and status progression (`To Do`, `In Progress`, `Done`).
+3. **Markdown Notes with Syntax Highlighting**: Full GitHub Flavored Markdown (GFM) notes editor with live split-preview and Prism syntax highlighting for TypeScript, Go, Rust, Python, Bash, SQL, etc.
+4. **Practice Projects Showcase**: Tracks hands-on projects with direct links to GitHub repositories and live demos.
+5. **Unified Kanban Board**: Drag-and-drop / quick-switch Kanban board unifying both Materials and Practice Projects with instant optimistic UI updates and filters.
+6. **Neo-Brutalism Theme**: High-contrast borders, bold offset shadows, vibrant accents, and zero-FOUC dark mode toggle.
+7. **100% Free Hosting on Cloudflare**: Runs effortlessly on Cloudflare Pages + D1 SQLite free tier (5,000,000 reads/day, 100,000 writes/day, 10 GB storage).
+
+---
+
+## 🛠 Tech Stack
+
+- **Runtime & Package Manager**: [Bun](https://bun.sh)
+- **Framework**: [SvelteKit](https://kit.svelte.dev) + `@sveltejs/adapter-cloudflare`
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) (Modern `@import` & `@theme` setup)
+- **Database & ORM**: [Cloudflare D1](https://developers.cloudflare.com/d1/) + [Drizzle ORM](https://orm.drizzle.team)
+- **Markdown & Code Highlighting**: `marked` + `prismjs`
+- **Icons**: `lucide-svelte`
+
+---
+
+## 💻 Local Development
+
+### 1. Install Dependencies
+```bash
+bun install
 ```
 
-To recreate this project with the same configuration:
+### 2. Run Local Dev Server
+```bash
+bun run dev
+```
+Open `http://localhost:5173`.
 
-```sh
-# recreate this project
-npx sv@0.17.0 create --template minimal --types ts --no-install .
+Default local access code: `belajarcoding` (Configurable via `ACCESS_CODE` env variable).
+
+---
+
+## ☁️ Cloudflare Free Deployment (Step-by-step)
+
+### 1. Create Cloudflare D1 Database
+```bash
+bunx wrangler d1 create learn-tracker-db
+```
+Copy the generated `database_id` into `wrangler.toml`:
+```toml
+[[d1_databases]]
+binding = "DB"
+database_name = "learn-tracker-db"
+database_id = "<YOUR_DATABASE_ID>"
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+### 2. Apply Migrations to Remote D1
+```bash
+bunx wrangler d1 migrations apply learn-tracker-db --remote
 ```
 
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
+### 3. Deploy to Cloudflare Pages
+```bash
+bun run build
+bunx wrangler pages deploy .svelte-kit/cloudflare --project-name learn-tracker
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### 4. Set Environment Secret (Access Code)
+In the Cloudflare Dashboard under **Pages > learn-tracker > Settings > Environment Variables**:
+- `ACCESS_CODE`: *Your custom secret password*

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Plus, ExternalLink, Github, Trash2, FolderGit2, CheckCircle2, Clock, Circle, X } from 'lucide-svelte';
+	import { Plus, ExternalLink, GitBranch, Trash2, FolderGit2, CheckCircle2, Clock, Circle, X } from 'lucide-svelte';
 
 	let { data } = $props();
 
@@ -140,7 +140,7 @@
 									rel="noopener noreferrer"
 									class="neo-btn-sm bg-slate-100 dark:bg-slate-700 text-black dark:text-white hover:bg-yellow-200 dark:hover:bg-slate-600 flex items-center gap-1 text-xs"
 								>
-									<Github class="w-3.5 h-3.5" />
+									<GitBranch class="w-3.5 h-3.5" />
 									Repo
 								</a>
 							{/if}
