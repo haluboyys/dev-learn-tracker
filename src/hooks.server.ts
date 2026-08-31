@@ -21,13 +21,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (isAuth) {
 			throw redirect(303, '/materials');
 		}
-		return resolve(event);
-	}
-
-	// Protect all other routes
-	if (!isAuth) {
+	} else if (!isAuth) {
 		throw redirect(303, '/login');
 	}
 
-	return resolve(event);
+	const themeCookie = event.cookies.get('theme') || 'light';
+
+	return resolve(event, {
+		transformPageChunk: ({ html }) => {
+			if (themeCookie === 'dark') {
+				return html.replace('<html lang="en">', '<html lang="en" class="dark">');
+			}
+			return html;
+		}
+	});
 };
