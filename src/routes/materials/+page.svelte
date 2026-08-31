@@ -120,7 +120,7 @@
 </script>
 
 <svelte:head>
-	<title>Topics</title>
+	<title>Topics - DevTrack</title>
 </svelte:head>
 
 <div class="space-y-8">

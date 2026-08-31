@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-	<title>Kanban Board</title>
+	<title>Kanban Board - DevTrack</title>
 </svelte:head>
 
 <div class="space-y-6">

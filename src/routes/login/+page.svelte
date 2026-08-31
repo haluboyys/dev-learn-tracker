@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-	<title>Sign In</title>
+	<title>Sign In - DevTrack</title>
 </svelte:head>
 
 <div class="min-h-[85vh] flex flex-col items-center justify-center relative p-4">
