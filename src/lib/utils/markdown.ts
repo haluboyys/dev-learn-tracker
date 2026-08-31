@@ -24,10 +24,10 @@ renderer.code = function ({ text, lang }: { text: string; lang?: string }) {
 				.replace(/'/g, '&#039;');
 
 	const langBadge = validLang
-		? `<div class="text-[10px] font-mono font-bold uppercase tracking-wider text-yellow-300 pb-1">${validLang}</div>`
+		? `<div class="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 pb-1">${validLang}</div>`
 		: '';
 
-	return `<div class="my-4 border-2 border-black dark:border-slate-400 bg-slate-900 text-slate-100 p-4 font-mono text-sm overflow-x-auto shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">${langBadge}<pre class="m-0 p-0 bg-transparent border-0 shadow-none"><code class="language-${lang || 'text'}">${highlighted}</code></pre></div>`;
+	return `<div class="my-4 border-3 border-black dark:border-white bg-slate-950 text-slate-100 p-4 font-mono text-sm overflow-x-auto shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]">${langBadge}<pre class="m-0 p-0 bg-transparent border-0 shadow-none"><code class="language-${lang || 'text'}">${highlighted}</code></pre></div>`;
 };
 
 marked.setOptions({
@@ -37,7 +37,7 @@ marked.setOptions({
 });
 
 export function renderMarkdown(markdown: string): string {
-	if (!markdown) return '<p class="text-slate-400 italic">Belum ada catatan untuk materi ini.</p>';
+	if (!markdown || !markdown.trim()) return '<p class="text-slate-500 dark:text-slate-400 italic">No notes written yet for this topic.</p>';
 	try {
 		return marked.parse(markdown) as string;
 	} catch (e) {

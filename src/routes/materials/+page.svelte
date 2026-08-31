@@ -45,15 +45,15 @@
 		{ label: 'Orange', value: '#ea580c', bg: 'bg-orange-600' }
 	];
 
-	const defaultCategories = ['Backend', 'Frontend', 'Database', 'DevOps', 'Mobile', 'Computer Science', 'Umum'];
+	const defaultCategories = ['Backend', 'Frontend', 'Database', 'DevOps', 'Mobile', 'Computer Science', 'General'];
 
 	const categorySelectOptions = $derived([
-		{ value: 'all', label: 'Semua Kategori' },
+		{ value: 'all', label: 'All Categories' },
 		...data.categories.map((cat: string) => ({ value: cat, label: cat }))
 	]);
 
 	const statusSelectOptions = [
-		{ value: 'all', label: 'Semua Status' },
+		{ value: 'all', label: 'All Statuses' },
 		{ value: 'todo', label: 'To Do' },
 		{ value: 'in_progress', label: 'In Progress' },
 		{ value: 'done', label: 'Done' }
@@ -120,7 +120,7 @@
 </script>
 
 <svelte:head>
-	<title>Materi Pembelajaran - Dev Hub</title>
+	<title>Topics - DevTrack</title>
 </svelte:head>
 
 <div class="space-y-8">
@@ -129,10 +129,10 @@
 		<div>
 			<div class="neo-badge bg-amber-500 text-black mb-2">
 				<BookOpen class="w-3.5 h-3.5" />
-				Materi Belajar & Catatan
+				Learning Curriculum & Notes
 			</div>
 			<h1 class="text-3xl sm:text-4xl font-black text-black dark:text-white tracking-tight uppercase">
-				Materi Pembelajaran
+				Learning Topics
 			</h1>
 		</div>
 
@@ -141,14 +141,14 @@
 			class="neo-btn neo-btn-primary flex items-center gap-2 self-start md:self-auto"
 		>
 			<Plus class="w-5 h-5 stroke-[3]" />
-			Tambah Materi
+			Add Topic
 		</button>
 	</div>
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
 		<div class="neo-card-sm p-4 bg-white dark:bg-slate-900">
-			<span class="text-xs font-black uppercase text-slate-600 dark:text-slate-400 tracking-wider">Total Materi</span>
+			<span class="text-xs font-black uppercase text-slate-600 dark:text-slate-400 tracking-wider">Total Topics</span>
 			<div class="text-3xl font-black text-black dark:text-white mt-1">{data.stats.totalMaterials}</div>
 		</div>
 		<div class="neo-card-sm p-4 bg-amber-100 dark:bg-amber-950/40">
@@ -161,7 +161,7 @@
 		</div>
 		<div class="neo-card-sm p-4 bg-emerald-100 dark:bg-emerald-950/40">
 			<span class="text-xs font-black uppercase text-emerald-900 dark:text-emerald-300 tracking-wider">
-				Selesai ({data.stats.overallProgress}%)
+				Completed ({data.stats.overallProgress}%)
 			</span>
 			<div class="text-3xl font-black text-emerald-950 dark:text-emerald-200 mt-1">{data.stats.totalDone}</div>
 		</div>
@@ -172,7 +172,7 @@
 		<div class="relative flex-1">
 			<input
 				type="text"
-				placeholder="Cari materi atau isi catatan..."
+				placeholder="Search topics or note content..."
 				bind:value={searchQuery}
 				class="w-full pl-10 pr-4 py-2.5 neo-input text-xs sm:text-sm font-bold"
 			/>
@@ -201,17 +201,17 @@
 		<div class="neo-card p-10 text-center bg-white dark:bg-slate-900 my-8">
 			<BookOpen class="w-12 h-12 mx-auto mb-3 text-slate-400" />
 			<h3 class="text-lg font-black uppercase text-black dark:text-white">
-				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Tidak ada materi yang sesuai filter' : 'Belum ada Materi Pembelajaran'}
+				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'No topics match your filters' : 'No Learning Topics Yet'}
 			</h3>
 			<p class="text-slate-600 dark:text-slate-400 text-sm mt-1 max-w-md mx-auto font-medium">
-				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Coba ubah filter atau kata kunci pencarian kamu.' : 'Mulai belajar dengan membuat materi baru (misalnya: Golang Dasar, SvelteKit 5, PostgreSQL Query).'}
+				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Try adjusting your search query or filters.' : 'Start learning by creating a new topic (e.g., Golang Basics, SvelteKit 5, PostgreSQL Query).'}
 			</p>
 			{#if !searchQuery && selectedCategory === 'all' && selectedStatus === 'all'}
 				<button
 					onclick={() => (showModal = true)}
 					class="neo-btn neo-btn-primary mt-5"
 				>
-					+ Buat Materi Pertama
+					+ Create First Topic
 				</button>
 			{/if}
 		</div>
@@ -228,7 +228,7 @@
 								class="neo-badge text-black font-black"
 								style="background-color: {item.color || '#f59e0b'};"
 							>
-								{item.category || 'Umum'}
+								{item.category || 'General'}
 							</span>
 
 							<!-- Status Cycle Button -->
@@ -237,7 +237,7 @@
 								<input type="hidden" name="status" value={getNextStatus(item.status)} />
 								<button
 									type="submit"
-									title="Klik untuk ubah status: {item.status}"
+									title="Click to cycle status: {item.status}"
 									class="neo-badge {badge.classes} cursor-pointer hover:scale-105 transition-transform"
 								>
 									<badge.icon class="w-3.5 h-3.5 stroke-[2.5]" />
@@ -261,7 +261,7 @@
 									class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline"
 								>
 									<ExternalLink class="w-3.5 h-3.5" />
-									Dokumentasi / Referensi
+									Documentation / Reference
 								</a>
 							</div>
 						{/if}
@@ -274,7 +274,7 @@
 								</p>
 							{:else}
 								<p class="text-xs font-mono italic text-slate-500 dark:text-slate-400">
-									Belum ada catatan. Klik tombol di bawah untuk menulis catatan.
+									No notes yet. Click the button below to start writing.
 								</p>
 							{/if}
 						</div>
@@ -287,14 +287,14 @@
 							class="flex-1 neo-btn-sm neo-btn-primary flex items-center justify-center gap-1.5 py-2"
 						>
 							<FileText class="w-4 h-4 stroke-[2.5]" />
-							{item.notes && item.notes.trim() ? 'Buka Catatan' : 'Tulis Catatan'}
+							{item.notes && item.notes.trim() ? 'Open Notes' : 'Write Notes'}
 							<ArrowRight class="w-3.5 h-3.5 stroke-[2.5]" />
 						</a>
 
 						<button
 							type="button"
 							onclick={() => promptDelete({ id: item.id, title: item.title })}
-							aria-label="Hapus Materi"
+							aria-label="Delete Topic"
 							class="neo-btn-icon neo-btn-danger"
 						>
 							<Trash2 class="w-4 h-4 text-white stroke-[2.5]" />
@@ -313,7 +313,7 @@
 			<div class="flex items-center justify-between pb-3 border-b-3 border-black dark:border-white mb-5">
 				<h3 class="font-black text-xl uppercase text-black dark:text-white flex items-center gap-2">
 					<BookOpen class="w-5 h-5" />
-					Tambah Materi Baru
+					Add New Topic
 				</h3>
 				<button
 					onclick={() => (showModal = false)}
@@ -339,7 +339,7 @@
 			>
 				<div>
 					<label for="mat-title" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-						Judul Materi (Besar)
+						Topic Title
 					</label>
 					<input
 						type="text"
@@ -347,7 +347,7 @@
 						name="title"
 						required
 						bind:value={newTitle}
-						placeholder="contoh: Golang Dasar, SvelteKit 5, Docker Swarm"
+						placeholder="e.g., Golang Basics, SvelteKit 5, Docker Swarm"
 						class="w-full px-3.5 py-2.5 neo-input"
 					/>
 				</div>
@@ -355,7 +355,7 @@
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
 						<label for="mat-category" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-							Kategori
+							Category
 						</label>
 						<input
 							type="text"
@@ -363,7 +363,7 @@
 							name="category"
 							bind:value={newCategory}
 							list="categories-list"
-							placeholder="contoh: Backend"
+							placeholder="e.g., Backend"
 							class="w-full px-3.5 py-2.5 neo-input text-xs"
 						/>
 						<datalist id="categories-list">
@@ -375,7 +375,7 @@
 
 					<div>
 						<span class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-							Warna Label
+							Badge Color
 						</span>
 						<div class="flex gap-1.5 pt-1">
 							{#each colorOptions as c}
@@ -392,7 +392,7 @@
 
 				<div>
 					<label for="mat-url" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-						URL Dokumentasi / Belajar (Opsional)
+						Documentation / Resource URL (Optional)
 					</label>
 					<input
 						type="url"
@@ -410,13 +410,13 @@
 						onclick={() => (showModal = false)}
 						class="neo-btn neo-btn-neutral text-xs"
 					>
-						Batal
+						Cancel
 					</button>
 					<button
 						type="submit"
 						class="neo-btn neo-btn-primary text-xs font-black"
 					>
-						Simpan Materi
+						Save Topic
 					</button>
 				</div>
 			</form>
@@ -427,10 +427,10 @@
 <!-- Custom Delete Confirmation Modal -->
 <ConfirmModal
 	bind:open={showDeleteConfirm}
-	title="Hapus Materi?"
-	message={`Apakah kamu yakin ingin menghapus materi "${itemToDelete?.title || ''}" beserta seluruh catatannya? Tindakan ini tidak dapat dibatalkan.`}
-	confirmLabel="Ya, Hapus Materi"
-	cancelLabel="Batal"
+	title="Delete Topic?"
+	message={`Are you sure you want to delete "${itemToDelete?.title || ''}" and all its notes? This action cannot be undone.`}
+	confirmLabel="Yes, Delete Topic"
+	cancelLabel="Cancel"
 	variant="danger"
 	onconfirm={executeDelete}
 />

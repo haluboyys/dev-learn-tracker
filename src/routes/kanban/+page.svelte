@@ -27,13 +27,13 @@
 	let searchQuery = $state<string>('');
 
 	const typeSelectOptions = [
-		{ value: 'all', label: 'Semua Tipe' },
-		{ value: 'material', label: 'Hanya Materi' },
-		{ value: 'project', label: 'Hanya Project' }
+		{ value: 'all', label: 'All Types' },
+		{ value: 'material', label: 'Topics Only' },
+		{ value: 'project', label: 'Projects Only' }
 	];
 
 	const categorySelectOptions = $derived([
-		{ value: 'all', label: 'Semua Kategori' },
+		{ value: 'all', label: 'All Categories' },
 		...data.categories.map((cat: string) => ({ value: cat, label: cat }))
 	]);
 
@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-	<title>Unified Kanban Board - Dev Hub</title>
+	<title>Kanban Board - DevTrack</title>
 </svelte:head>
 
 <div class="space-y-6">
@@ -121,7 +121,7 @@
 			<div class="relative">
 				<input
 					type="text"
-					placeholder="Filter kartu..."
+					placeholder="Filter cards..."
 					bind:value={searchQuery}
 					class="pl-8 pr-3 py-2 neo-input text-xs font-bold w-36 sm:w-44"
 				/>
@@ -168,7 +168,7 @@
 					{#if colItems.length === 0}
 						<div class="h-36 border-3 border-dashed border-black/20 dark:border-white/20 flex flex-col items-center justify-center p-4 text-center">
 							<span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
-								Tarik & letakkan kartu ke sini
+								Drag & drop cards here
 							</span>
 						</div>
 					{/if}
@@ -186,7 +186,7 @@
 									{#if item.type === 'material'}
 										<span class="neo-badge bg-amber-400 text-black text-[10px] py-0.5 px-1.5">
 											<BookOpen class="w-3 h-3 stroke-[2.5]" />
-											Materi
+											Topic
 										</span>
 									{:else}
 										<span class="neo-badge bg-sky-600 text-white text-[10px] py-0.5 px-1.5">
@@ -224,7 +224,7 @@
 											class="text-[11px] font-black text-black dark:text-white hover:text-amber-500 flex items-center gap-1 underline underline-offset-2"
 										>
 											<FileText class="w-3.5 h-3.5" />
-											Catatan
+											Notes
 										</a>
 										{#if item.url}
 											<a
@@ -232,7 +232,7 @@
 												target="_blank"
 												rel="noopener noreferrer"
 												class="text-[11px] font-mono text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-0.5"
-												title="Buka Referensi"
+												title="Open Reference"
 											>
 												<ExternalLink class="w-3 h-3" />
 											</a>
@@ -256,7 +256,7 @@
 												rel="noopener noreferrer"
 												class="text-[11px] font-black text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1"
 											>
-												<ExternalLink class="w-3 h-3" />
+												<ExternalLink class="w-3.5 h-3.5" />
 												Demo
 											</a>
 										{/if}
@@ -268,7 +268,7 @@
 									{#if col.id !== 'todo'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'done' ? 'in_progress' : 'todo')}
-											title="Mundur status"
+											title="Move back"
 											class="neo-btn-icon neo-btn-neutral p-1 text-[10px]"
 										>
 											<ArrowLeft class="w-3 h-3 stroke-[2.5]" />
@@ -278,7 +278,7 @@
 									{#if col.id !== 'done'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'todo' ? 'in_progress' : 'done')}
-											title="Maju status"
+											title="Move forward"
 											class="neo-btn-icon neo-btn-primary p-1 text-[10px]"
 										>
 											<ArrowRight class="w-3 h-3 stroke-[2.5]" />

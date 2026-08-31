@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 	const overallProgress = totalMaterials > 0 ? Math.round((totalDone / totalMaterials) * 100) : 0;
 
 	// Extract unique categories for filtering
-	const categories = Array.from(new Set(allMaterials.map((m: any) => m.category || 'Umum')));
+	const categories = Array.from(new Set(allMaterials.map((m: any) => m.category || 'General')));
 
 	return {
 		materials: allMaterials,
@@ -39,13 +39,13 @@ export const actions: Actions = {
 	createMaterial: async ({ request, platform }) => {
 		const data = await request.formData();
 		const title = data.get('title')?.toString()?.trim();
-		const category = data.get('category')?.toString()?.trim() || 'Umum';
+		const category = data.get('category')?.toString()?.trim() || 'General';
 		const color = data.get('color')?.toString()?.trim() || '#facc15';
 		const url = data.get('url')?.toString()?.trim() || null;
 		const notes = data.get('notes')?.toString()?.trim() || '';
 
 		if (!title) {
-			return fail(400, { error: 'Judul materi wajib diisi' });
+			return fail(400, { error: 'Material title is required' });
 		}
 
 		const db = getDb(platform);
@@ -71,7 +71,7 @@ export const actions: Actions = {
 		const status = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
 
 		if (!id || !['todo', 'in_progress', 'done'].includes(status)) {
-			return fail(400, { error: 'Status tidak valid' });
+			return fail(400, { error: 'Invalid status' });
 		}
 
 		const db = getDb(platform);
@@ -89,7 +89,7 @@ export const actions: Actions = {
 	deleteMaterial: async ({ request, platform }) => {
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
-		if (!id) return fail(400, { error: 'ID tidak valid' });
+		if (!id) return fail(400, { error: 'Invalid ID' });
 
 		const db = getDb(platform);
 		await db.delete(materials).where(eq(materials.id, id));

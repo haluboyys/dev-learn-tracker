@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Hard neo-brutalist shadow box -->
+  <rect x="8" y="8" width="50" height="50" fill="#000000" rx="0"/>
+  
+  <!-- Main foreground box -->
+  <rect x="4" y="4" width="50" height="50" fill="#f59e0b" stroke="#000000" stroke-width="4" rx="0"/>
+  
+  <!-- Top bar accent line -->
+  <rect x="4" y="4" width="50" height="12" fill="#0284c7" stroke="#000000" stroke-width="4"/>
+  
+  <!-- Mini decorative square dots in top bar -->
+  <rect x="10" y="8" width="4" height="4" fill="#000000"/>
+  <rect x="18" y="8" width="4" height="4" fill="#000000"/>
+  
+  <!-- Neo-brutalist code prompt: > _ -->
+  <!-- Prompt chevron > -->
+  <path d="M14 26 L26 36 L14 46" fill="none" stroke="#000000" stroke-width="5" stroke-linecap="square" stroke-linejoin="miter"/>
+  
+  <!-- Terminal underscore _ -->
+  <rect x="32" y="42" width="16" height="5" fill="#000000"/>
+</svg>

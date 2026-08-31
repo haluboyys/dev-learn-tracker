@@ -27,7 +27,7 @@
 	let title = $state(data.material.title);
 	let notes = $state(data.material.notes || '');
 	let status = $state(data.material.status);
-	let category = $state(data.material.category || 'Umum');
+	let category = $state(data.material.category || 'General');
 	let isSaving = $state(false);
 	let saveSuccess = $state(false);
 	let activeTab = $state<'split' | 'edit' | 'preview'>('split');
@@ -54,7 +54,7 @@
 		const start = textareaEl.selectionStart;
 		const end = textareaEl.selectionEnd;
 		const selected = notes.substring(start, end);
-		const replacement = before + (selected || 'teks') + after;
+		const replacement = before + (selected || 'text') + after;
 		notes = notes.substring(0, start) + replacement + notes.substring(end);
 		setTimeout(() => {
 			if (textareaEl) {
@@ -68,7 +68,7 @@
 <svelte:window onkeydown={handleKeyDown} />
 
 <svelte:head>
-	<title>{title} - Catatan Pembelajaran</title>
+	<title>{title} - Notes</title>
 </svelte:head>
 
 <div class="space-y-6">
@@ -80,7 +80,7 @@
 				class="neo-btn-sm neo-btn-neutral flex items-center gap-1.5"
 			>
 				<ArrowLeft class="w-4 h-4 stroke-[2.5]" />
-				Daftar Materi
+				All Topics
 			</a>
 
 			<span
@@ -142,7 +142,7 @@
 			<div class="flex-1">
 				<div class="flex items-center gap-2 mb-1">
 					<label for="material-title-input" class="text-[10px] font-mono font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
-						Judul Materi
+						Topic Title
 					</label>
 				</div>
 				<input
@@ -151,7 +151,7 @@
 					name="title"
 					bind:value={title}
 					class="w-full font-black text-xl sm:text-2xl uppercase bg-transparent text-black dark:text-white outline-none border-b-3 border-dashed border-black/30 dark:border-white/30 focus:border-black dark:focus:border-white pb-1"
-					placeholder="Judul Materi..."
+					placeholder="Topic Title..."
 				/>
 				{#if data.material.url}
 					<div class="mt-2">
@@ -184,7 +184,7 @@
 					class="neo-btn {saveSuccess ? 'neo-btn-success' : 'neo-btn-primary'} text-xs font-black flex items-center gap-1.5"
 				>
 					<Save class="w-4 h-4 stroke-[3]" />
-					{isSaving ? 'Menyimpan...' : saveSuccess ? 'Tersimpan! ✓' : 'Simpan (Cmd+S)'}
+					{isSaving ? 'Saving...' : saveSuccess ? 'Saved! ✓' : 'Save (Cmd+S)'}
 				</button>
 			</div>
 		</div>
@@ -206,7 +206,7 @@
 							<button
 								type="button"
 								onclick={() => insertSnippet('**', '**')}
-								title="Teks Tebal"
+								title="Bold Text"
 								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
 							>
 								B
@@ -214,7 +214,7 @@
 							<button
 								type="button"
 								onclick={() => insertSnippet('*', '*')}
-								title="Teks Miring"
+								title="Italic Text"
 								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white italic font-bold cursor-pointer"
 							>
 								I
@@ -238,7 +238,7 @@
 							<button
 								type="button"
 								onclick={() => insertSnippet('- ')}
-								title="List"
+								title="Bulleted List"
 								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
 							>
 								• List
@@ -246,7 +246,7 @@
 							<button
 								type="button"
 								onclick={() => insertSnippet('[', '](https://...)')}
-								title="Link"
+								title="Hyperlink"
 								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
 							>
 								Link
@@ -258,7 +258,7 @@
 						bind:this={textareaEl}
 						name="notes"
 						bind:value={notes}
-						placeholder="Tulis catatan di sini menggunakan Markdown... (Mendukung GFM, list, code block ```typescript ... ``` dll)"
+						placeholder="Write notes here in Markdown... (Supports GFM, lists, code blocks ```typescript ... ``` etc.)"
 						class="flex-1 w-full p-4 sm:p-6 font-mono text-sm leading-relaxed bg-white dark:bg-slate-900 text-black dark:text-white outline-none resize-none font-medium"
 					></textarea>
 				</div>

@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ params, platform }) => {
 	const materialList = await db.select().from(materials).where(eq(materials.id, params.id)).limit(1);
 
 	if (!materialList || materialList.length === 0) {
-		throw error(404, 'Materi tidak ditemukan');
+		throw error(404, 'Material topic not found');
 	}
 
 	return {

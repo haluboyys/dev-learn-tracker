@@ -5,7 +5,7 @@ const SCHEMA_SQL = `
 CREATE TABLE IF NOT EXISTS materials (
 	id text PRIMARY KEY NOT NULL,
 	title text NOT NULL,
-	category text DEFAULT 'Umum' NOT NULL,
+	category text DEFAULT 'General' NOT NULL,
 	color text DEFAULT '#facc15' NOT NULL,
 	url text,
 	status text DEFAULT 'todo' NOT NULL,

@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Masuk - Dev Learning Tracker</title>
+	<title>Sign In - DevTrack</title>
 </svelte:head>
 
 <div class="min-h-[85vh] flex flex-col items-center justify-center relative p-4">
@@ -36,10 +36,10 @@
 		</div>
 
 		<h1 class="text-3xl font-black uppercase tracking-tight text-black dark:text-white mb-2 flex items-center gap-2">
-			LEARN<span class="bg-sky-600 text-white px-2 py-0.5 border-2 border-black dark:border-white">DEV</span>
+			DEV<span class="bg-sky-600 text-white px-2 py-0.5 border-2 border-black dark:border-white">TRACK</span>
 		</h1>
 		<p class="text-slate-700 dark:text-slate-300 text-sm font-bold mb-6">
-			Masukkan access code untuk membuka tracker pembelajaran kamu.
+			Enter your access code to unlock your learning tracker.
 		</p>
 
 		{#if form?.error}
@@ -83,7 +83,7 @@
 				class="w-full neo-btn neo-btn-primary py-3.5 text-sm font-black flex items-center justify-center gap-2"
 			>
 				<Sparkles class="w-4 h-4 stroke-[2.5]" />
-				{loading ? 'MEMERIKSA...' : 'MASUK KE TRACKER'}
+				{loading ? 'VERIFYING...' : 'SIGN IN TO TRACKER'}
 			</button>
 		</form>
 

@@ -3,7 +3,7 @@ import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 export const materials = sqliteTable('materials', {
 	id: text('id').primaryKey(),
 	title: text('title').notNull(),
-	category: text('category').notNull().default('Umum'),
+	category: text('category').notNull().default('General'),
 	color: text('color').notNull().default('#facc15'),
 	url: text('url'),
 	status: text('status', { enum: ['todo', 'in_progress', 'done'] }).notNull().default('todo'),

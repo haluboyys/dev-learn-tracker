@@ -1,16 +1,16 @@
-# ⚡ Dev Learning Hub (Neo-Brutalist Personal Tracker)
+# ⚡ DevTrack (Neo-Brutalist Developer Learning Tracker)
 
-Personal programming learning tracker designed with a **Neo-Brutalism aesthetic (Dark Mode support)**, built using **SvelteKit + TypeScript**, styled with **Tailwind CSS v4**, and backed by **Cloudflare D1 (SQLite)**.
+A personal programming learning hub and knowledge tracker designed with a sharp **Neo-Brutalism aesthetic (Dark Mode support)**, built using **SvelteKit + TypeScript**, styled with **Tailwind CSS v4**, and backed by serverless **Cloudflare D1 (SQLite)**.
 
 ---
 
 ## 🚀 Features
 
 1. **Access Code Authentication**: Fast single access code gate without needing third-party auth providers.
-2. **Materials & Curriculum Tracker**: Organizes topics, learning items, external resource URLs, and status progression (`To Do`, `In Progress`, `Done`).
+2. **Learning Topics & Curriculum Tracker**: Organizes learning items, categories, external documentation links, and status progression (`To Do`, `In Progress`, `Done`).
 3. **Markdown Notes with Syntax Highlighting**: Full GitHub Flavored Markdown (GFM) notes editor with live split-preview and Prism syntax highlighting for TypeScript, Go, Rust, Python, Bash, SQL, etc.
-4. **Practice Projects Showcase**: Tracks hands-on projects with direct links to GitHub repositories and live demos.
-5. **Unified Kanban Board**: Drag-and-drop / quick-switch Kanban board unifying both Materials and Practice Projects with instant optimistic UI updates and filters.
+4. **Practice Projects Showcase**: Tracks hands-on practice projects with direct links to GitHub repositories and live demos.
+5. **Unified Kanban Board**: Drag-and-drop / quick-switch Kanban board unifying both Learning Topics and Practice Projects with instant optimistic UI updates and filters.
 6. **Neo-Brutalism Theme**: High-contrast borders, bold offset shadows, vibrant accents, and zero-FOUC dark mode toggle.
 7. **100% Free Hosting on Cloudflare**: Runs effortlessly on Cloudflare Pages + D1 SQLite free tier (5,000,000 reads/day, 100,000 writes/day, 10 GB storage).
 
@@ -40,7 +40,7 @@ bun run dev
 ```
 Open `http://localhost:5173`.
 
-Default local access code: `belajarcoding` (Configurable via `ACCESS_CODE` env variable).
+Default local access code: `belajarcoding` (Configurable via `ACCESS_CODE` environment variable).
 
 ---
 

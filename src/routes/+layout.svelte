@@ -23,7 +23,7 @@
 					<div class="w-10 h-10 bg-amber-500 border-3 border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] flex items-center justify-center group-hover:rotate-6 transition-transform">
 						<Code class="w-6 h-6 text-black stroke-[3]" />
 					</div>
-					<span class="text-xl">LEARN<span class="bg-sky-600 text-white px-2 py-0.5 ml-1.5 border-2 border-black dark:border-white">DEV</span></span>
+					<span class="text-xl">DEV<span class="bg-sky-600 text-white px-2 py-0.5 ml-1.5 border-2 border-black dark:border-white">TRACK</span></span>
 				</a>
 
 				<!-- Desktop Navigation -->
@@ -33,7 +33,7 @@
 						class="neo-btn-sm {$page.url.pathname.startsWith('/materials') ? 'neo-btn-primary' : 'neo-btn-neutral'}"
 					>
 						<BookOpen class="w-4 h-4 stroke-[2.5]" />
-						Materi
+						Topics
 					</a>
 					<a
 						href="/projects"
@@ -71,7 +71,7 @@
 							class="neo-btn-sm neo-btn-danger"
 						>
 							<LogOut class="w-3.5 h-3.5 stroke-[2.5]" />
-							Keluar
+							Sign Out
 						</button>
 					</form>
 				</div>
@@ -84,7 +84,7 @@
 					class="flex-1 py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 {$page.url.pathname.startsWith('/materials') ? 'bg-amber-400 text-black' : 'text-black dark:text-white'}"
 				>
 					<BookOpen class="w-4 h-4 stroke-[2.5]" />
-					Materi
+					Topics
 				</a>
 				<a
 					href="/projects"

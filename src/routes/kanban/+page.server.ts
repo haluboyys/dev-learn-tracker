@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 		id: m.id,
 		type: 'material' as const,
 		title: m.title,
-		category: m.category || 'Materi',
+		category: m.category || 'Topic',
 		color: m.color || '#facc15',
 		status: m.status as 'todo' | 'in_progress' | 'done',
 		url: m.url,
@@ -55,7 +55,7 @@ export const actions: Actions = {
 		const newStatus = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
 
 		if (!id || !type || !['todo', 'in_progress', 'done'].includes(newStatus)) {
-			return fail(400, { error: 'Payload tidak valid' });
+			return fail(400, { error: 'Invalid payload' });
 		}
 
 		const db = getDb(platform);

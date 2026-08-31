@@ -48,12 +48,12 @@
 	const defaultCategories = ['Frontend', 'Backend', 'Fullstack', 'CLI Tool', 'DevOps', 'Mobile', 'Experiment'];
 
 	const categorySelectOptions = $derived([
-		{ value: 'all', label: 'Semua Kategori' },
+		{ value: 'all', label: 'All Categories' },
 		...data.categories.map((cat: string) => ({ value: cat, label: cat }))
 	]);
 
 	const statusSelectOptions = [
-		{ value: 'all', label: 'Semua Status' },
+		{ value: 'all', label: 'All Statuses' },
 		{ value: 'todo', label: 'To Do' },
 		{ value: 'in_progress', label: 'In Progress' },
 		{ value: 'done', label: 'Done' }
@@ -120,7 +120,7 @@
 </script>
 
 <svelte:head>
-	<title>Practice Projects - Dev Hub</title>
+	<title>Projects - DevTrack</title>
 </svelte:head>
 
 <div class="space-y-8">
@@ -141,14 +141,14 @@
 			class="neo-btn neo-btn-secondary flex items-center gap-2 self-start md:self-auto"
 		>
 			<Plus class="w-5 h-5 stroke-[3]" />
-			Tambah Project
+			Add Project
 		</button>
 	</div>
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
 		<div class="neo-card-sm p-4 bg-white dark:bg-slate-900">
-			<span class="text-xs font-black uppercase text-slate-600 dark:text-slate-400 tracking-wider">Total Project</span>
+			<span class="text-xs font-black uppercase text-slate-600 dark:text-slate-400 tracking-wider">Total Projects</span>
 			<div class="text-3xl font-black text-black dark:text-white mt-1">{data.stats.total}</div>
 		</div>
 		<div class="neo-card-sm p-4 bg-amber-100 dark:bg-amber-950/40">
@@ -160,7 +160,7 @@
 			<div class="text-3xl font-black text-sky-950 dark:text-sky-200 mt-1">{data.stats.inProgress}</div>
 		</div>
 		<div class="neo-card-sm p-4 bg-emerald-100 dark:bg-emerald-950/40">
-			<span class="text-xs font-black uppercase text-emerald-900 dark:text-emerald-300 tracking-wider">Selesai</span>
+			<span class="text-xs font-black uppercase text-emerald-900 dark:text-emerald-300 tracking-wider">Completed</span>
 			<div class="text-3xl font-black text-emerald-950 dark:text-emerald-200 mt-1">{data.stats.done}</div>
 		</div>
 	</div>
@@ -170,7 +170,7 @@
 		<div class="relative flex-1">
 			<input
 				type="text"
-				placeholder="Cari project atau deskripsi..."
+				placeholder="Search projects or description..."
 				bind:value={searchQuery}
 				class="w-full pl-10 pr-4 py-2.5 neo-input text-xs sm:text-sm font-bold"
 			/>
@@ -199,17 +199,17 @@
 		<div class="neo-card p-10 text-center bg-white dark:bg-slate-900 my-8">
 			<FolderGit2 class="w-12 h-12 mx-auto mb-3 text-slate-400" />
 			<h3 class="text-lg font-black uppercase text-black dark:text-white">
-				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Tidak ada project yang sesuai filter' : 'Belum ada Project Praktek'}
+				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'No projects match your filters' : 'No Practice Projects Yet'}
 			</h3>
 			<p class="text-slate-600 dark:text-slate-400 text-sm mt-1 max-w-md mx-auto font-medium">
-				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Coba ubah kata kunci atau filter status.' : 'Catat project latihan, cloning aplikasi, atau eksperimen kode yang sedang kamu bangun.'}
+				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Try changing your search query or status filter.' : 'Track hands-on practice, clone apps, or code experiments you are building.'}
 			</p>
 			{#if !searchQuery && selectedCategory === 'all' && selectedStatus === 'all'}
 				<button
 					onclick={() => (showModal = true)}
 					class="neo-btn neo-btn-secondary mt-5"
 				>
-					+ Buat Project Pertama
+					+ Create First Project
 				</button>
 			{/if}
 		</div>
@@ -235,7 +235,7 @@
 								<input type="hidden" name="status" value={getNextStatus(proj.status)} />
 								<button
 									type="submit"
-									title="Klik untuk ubah status: {proj.status}"
+									title="Click to cycle status: {proj.status}"
 									class="neo-badge {badge.classes} cursor-pointer hover:scale-105 transition-transform"
 								>
 									<badge.icon class="w-3.5 h-3.5 stroke-[2.5]" />
@@ -249,7 +249,7 @@
 						</h2>
 
 						<p class="text-slate-800 dark:text-slate-200 text-xs sm:text-sm mb-4 line-clamp-3 leading-relaxed font-semibold">
-							{proj.description || 'Tidak ada deskripsi.'}
+							{proj.description || 'No description provided.'}
 						</p>
 					</div>
 
@@ -283,7 +283,7 @@
 						<button
 							type="button"
 							onclick={() => promptDelete({ id: proj.id, title: proj.title })}
-							aria-label="Hapus Project"
+							aria-label="Delete Project"
 							class="neo-btn-icon neo-btn-danger"
 						>
 							<Trash2 class="w-4 h-4 text-white stroke-[2.5]" />
@@ -302,7 +302,7 @@
 			<div class="flex items-center justify-between pb-3 border-b-3 border-black dark:border-white mb-5">
 				<h3 class="font-black text-xl uppercase text-black dark:text-white flex items-center gap-2">
 					<FolderGit2 class="w-5 h-5" />
-					Tambah Project Baru
+					Add New Project
 				</h3>
 				<button
 					onclick={() => (showModal = false)}
@@ -329,7 +329,7 @@
 			>
 				<div>
 					<label for="proj-title" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-						Nama Project
+						Project Title
 					</label>
 					<input
 						type="text"
@@ -337,21 +337,21 @@
 						name="title"
 						required
 						bind:value={newTitle}
-						placeholder="contoh: CLI URL Shortener, Auth Microservice"
+						placeholder="e.g., CLI URL Shortener, Auth Microservice"
 						class="w-full px-3.5 py-2.5 neo-input"
 					/>
 				</div>
 
 				<div>
 					<label for="proj-desc" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-						Deskripsi Ringkas
+						Short Description
 					</label>
 					<textarea
 						id="proj-desc"
 						name="description"
 						rows="3"
 						bind:value={newDescription}
-						placeholder="Membangun sistem authentication dengan JWT dan session cookie..."
+						placeholder="Building an authentication system with JWT and session cookies..."
 						class="w-full px-3.5 py-2.5 neo-input text-xs"
 					></textarea>
 				</div>
@@ -359,7 +359,7 @@
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
 						<label for="proj-category" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-							Kategori / Tag
+							Category / Tag
 						</label>
 						<input
 							type="text"
@@ -367,7 +367,7 @@
 							name="category"
 							bind:value={newCategory}
 							list="proj-cat-list"
-							placeholder="contoh: Fullstack"
+							placeholder="e.g., Fullstack"
 							class="w-full px-3.5 py-2.5 neo-input text-xs"
 						/>
 						<datalist id="proj-cat-list">
@@ -379,7 +379,7 @@
 
 					<div>
 						<span class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
-							Warna Label
+							Badge Color
 						</span>
 						<div class="flex gap-1.5 pt-1">
 							{#each colorOptions as c}
@@ -430,13 +430,13 @@
 						onclick={() => (showModal = false)}
 						class="neo-btn neo-btn-neutral text-xs"
 					>
-						Batal
+						Cancel
 					</button>
 					<button
 						type="submit"
 						class="neo-btn neo-btn-secondary text-xs font-black"
 					>
-						Simpan Project
+						Save Project
 					</button>
 				</div>
 			</form>
@@ -447,10 +447,10 @@
 <!-- Custom Delete Confirmation Modal -->
 <ConfirmModal
 	bind:open={showDeleteConfirm}
-	title="Hapus Project?"
-	message={`Apakah kamu yakin ingin menghapus project "${itemToDelete?.title || ''}"? Tindakan ini tidak dapat dibatalkan.`}
-	confirmLabel="Ya, Hapus Project"
-	cancelLabel="Batal"
+	title="Delete Project?"
+	message={`Are you sure you want to delete "${itemToDelete?.title || ''}"? This action cannot be undone.`}
+	confirmLabel="Yes, Delete Project"
+	cancelLabel="Cancel"
 	variant="danger"
 	onconfirm={executeDelete}
 />

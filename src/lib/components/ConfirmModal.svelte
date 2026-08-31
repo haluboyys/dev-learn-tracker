@@ -3,10 +3,10 @@
 
 	let {
 		open = $bindable(false),
-		title = 'Konfirmasi Hapus',
-		message = 'Apakah kamu yakin ingin melanjutkan tindakan ini? Tindakan ini tidak dapat dibatalkan.',
-		confirmLabel = 'Ya, Hapus',
-		cancelLabel = 'Batal',
+		title = 'Confirm Delete',
+		message = 'Are you sure you want to proceed? This action cannot be undone.',
+		confirmLabel = 'Yes, Delete',
+		cancelLabel = 'Cancel',
 		variant = 'danger',
 		onconfirm = () => {},
 		oncancel = () => {}
@@ -84,7 +84,7 @@
 					type="button"
 					onclick={handleCancel}
 					disabled={loading}
-					aria-label="Tutup Modal"
+					aria-label="Close Modal"
 					class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white"
 				>
 					<X class="w-4 h-4" />
@@ -117,7 +117,7 @@
 				>
 					{#if loading}
 						<span class="inline-block animate-spin">⏳</span>
-						Memproses...
+						Processing...
 					{:else}
 						{confirmLabel}
 					{/if}

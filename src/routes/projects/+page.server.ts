@@ -38,7 +38,7 @@ export const actions: Actions = {
 		const status = (data.get('status')?.toString() as 'todo' | 'in_progress' | 'done') || 'todo';
 
 		if (!title) {
-			return fail(400, { error: 'Judul project wajib diisi' });
+			return fail(400, { error: 'Project title is required' });
 		}
 
 		const db = getDb(platform);
@@ -64,7 +64,7 @@ export const actions: Actions = {
 		const status = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
 
 		if (!id || !['todo', 'in_progress', 'done'].includes(status)) {
-			return fail(400, { error: 'Status tidak valid' });
+			return fail(400, { error: 'Invalid status' });
 		}
 
 		const db = getDb(platform);
@@ -82,7 +82,7 @@ export const actions: Actions = {
 	deleteProject: async ({ request, platform }) => {
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
-		if (!id) return fail(400, { error: 'ID tidak valid' });
+		if (!id) return fail(400, { error: 'Invalid ID' });
 
 		const db = getDb(platform);
 		await db.delete(projects).where(eq(projects.id, id));

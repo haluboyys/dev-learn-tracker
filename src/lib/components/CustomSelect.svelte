@@ -11,7 +11,7 @@
 		value = $bindable(''),
 		options = [],
 		name = '',
-		placeholder = 'Pilih...',
+		placeholder = 'Select...',
 		class: customClass = '',
 		size = 'md',
 		onchange

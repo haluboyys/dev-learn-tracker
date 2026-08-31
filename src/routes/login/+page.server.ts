@@ -17,11 +17,11 @@ export const actions: Actions = {
 		const expectedCode = platform?.env?.ACCESS_CODE || process.env.ACCESS_CODE || 'belajarcoding';
 
 		if (!code) {
-			return fail(400, { error: 'Access code wajib diisi!' });
+			return fail(400, { error: 'Access code is required!' });
 		}
 
 		if (code !== expectedCode) {
-			return fail(401, { error: 'Access code salah!' });
+			return fail(401, { error: 'Invalid access code!' });
 		}
 
 		// Set cookie
