@@ -7,24 +7,26 @@
 </script>
 
 <svelte:head>
-	<title>Sign In - DevTrack</title>
+	<title>Sign In</title>
 </svelte:head>
 
 <div class="min-h-[85vh] flex flex-col items-center justify-center relative p-4">
 	<!-- Login Card -->
 	<div class="w-full max-w-md neo-card p-6 sm:p-8 bg-[#1a1f2c]">
 		<!-- Header Banner -->
-		<div class="neo-badge bg-[#e2b342] text-[#12151e] mb-4">
-			<Terminal class="w-3.5 h-3.5" />
-			Personal Dev Hub
+		<div class="flex items-center gap-3 mb-6">
+			<div class="w-10 h-10 bg-[#e2b342] border-2 border-[#384259] shadow-[3px_3px_0px_0px_#080a0f] flex items-center justify-center">
+				<Terminal class="w-5 h-5 text-[#12151e] stroke-[3]" />
+			</div>
+			<div>
+				<h1 class="text-xl font-black uppercase tracking-wider text-[#f1f5f9]">
+					Personal Hub
+				</h1>
+				<p class="text-[#94a3b8] text-xs font-bold">
+					Enter access code to continue
+				</p>
+			</div>
 		</div>
-
-		<h1 class="text-3xl font-black uppercase tracking-tight text-[#f1f5f9] mb-2 flex items-center gap-2">
-			DEV<span class="bg-[#64b5d6] text-[#12151e] px-2 py-0.5 border-2 border-[#384259] font-black">TRACK</span>
-		</h1>
-		<p class="text-[#94a3b8] text-sm font-bold mb-6">
-			Enter your access code to unlock your learning tracker.
-		</p>
 
 		{#if form?.error}
 			<div class="bg-[#e07a8b] border-2 border-[#384259] text-[#12151e] font-black text-xs uppercase p-3 mb-6 shadow-[3px_3px_0px_0px_#080a0f]">

@@ -13,11 +13,10 @@
 		<header class="border-b-3 border-[#384259] bg-[#161a26] sticky top-0 z-40">
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 				<!-- Brand -->
-				<a href="/materials" class="flex items-center gap-2.5 font-black text-xl tracking-wider text-[#f1f5f9] uppercase group">
+				<a href="/materials" class="flex items-center gap-2.5 group" aria-label="Home">
 					<div class="w-9 h-9 bg-[#e2b342] border-2 border-[#384259] shadow-[2.5px_2.5px_0px_0px_#080a0f] flex items-center justify-center group-hover:rotate-6 transition-transform">
 						<Code class="w-5 h-5 text-[#12151e] stroke-[3]" />
 					</div>
-					<span class="text-xl">DEV<span class="bg-[#64b5d6] text-[#12151e] px-2 py-0.5 ml-1.5 border-2 border-[#384259] font-black">TRACK</span></span>
 				</a>
 
 				<!-- Desktop Navigation -->
