@@ -2,7 +2,7 @@
 
 A personal developer learning hub and practice tracker built with SvelteKit 5, TypeScript, Tailwind CSS v4, and Cloudflare D1 (SQLite).
 
-Designed with a high-contrast Neo-Brutalism interface featuring full Light and Dark mode support.
+Designed with a high-contrast Dark Pastel Neo-Brutalism interface.
 
 ---
 
@@ -21,7 +21,7 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
 - **Markdown Notes Workspace**: Split-screen editor with live preview, keyboard shortcuts (`Cmd+S` / `Ctrl+S`), and Prism.js syntax highlighting across multiple programming languages.
 - **Practice Projects Tracker**: Portfolio and experiment log with links to source repositories and live deployments.
 - **Unified Kanban Board**: Drag-and-drop workflow consolidating both study topics and practice projects into three status columns with instant optimistic UI updates.
-- **Neo-Brutalism UI**: Clean, high-contrast typography, solid borders, offset shadows, and zero-FOUC theme switching.
+- **Neo-Brutalism UI**: Dark Pastel aesthetic with soft slate surfaces, muted pastel accents (amber, sky, sage, rose, lavender), crisp borders, and solid hard offset shadows.
 
 ---
 

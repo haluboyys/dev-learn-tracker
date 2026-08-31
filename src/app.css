@@ -2,19 +2,28 @@
 
 @layer base {
   :root {
-    --bg-page: #f1f5f9;
-    --bg-surface: #ffffff;
-    --text-primary: #090d16;
-    --border-color: #000000;
-    --shadow-color: #000000;
-  }
+    --bg-page: #12151e;
+    --bg-surface: #1a1f2c;
+    --bg-elevated: #222838;
+    --bg-input: #151824;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: #384259;
+    --shadow-color: #080a0f;
 
-  .dark {
-    --bg-page: #090d16;
-    --bg-surface: #141c2e;
-    --text-primary: #f8fafc;
-    --border-color: #f1f5f9;
-    --shadow-color: #f8fafc;
+    /* Dark Pastel Accent Palette */
+    --pastel-amber: #e2b342;
+    --pastel-amber-hover: #edd078;
+    --pastel-sky: #64b5d6;
+    --pastel-sky-hover: #84cce6;
+    --pastel-sage: #7cb98f;
+    --pastel-sage-hover: #96cca7;
+    --pastel-rose: #e07a8b;
+    --pastel-rose-hover: #eb95a3;
+    --pastel-lavender: #ab92bf;
+    --pastel-lavender-hover: #c1aed1;
+    --pastel-orange: #e59a68;
+    --pastel-orange-hover: #efa97c;
   }
 
   body {
@@ -25,37 +34,38 @@
 }
 
 /* ==========================================================================
-   Neo-Brutalist Global Utilities
+   Dark Pastel Neo-Brutalist Global Utilities
    ========================================================================== */
 
 /* Cards & Containers */
 .neo-card {
   background-color: var(--bg-surface);
-  border: 3.5px solid var(--border-color);
-  box-shadow: 5px 5px 0px 0px var(--shadow-color);
+  border: 3px solid var(--border-color);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .neo-card-sm {
   background-color: var(--bg-surface);
   border: 2.5px solid var(--border-color);
-  box-shadow: 3.5px 3.5px 0px 0px var(--shadow-color);
+  box-shadow: 3px 3px 0px 0px var(--shadow-color);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* Inputs & Custom Dropdowns */
+/* Inputs & Custom Selects */
 .neo-input {
-  background-color: var(--bg-surface);
+  background-color: var(--bg-input);
   color: var(--text-primary);
-  border: 3px solid var(--border-color);
+  border: 2.5px solid var(--border-color);
   box-shadow: 3px 3px 0px 0px var(--shadow-color);
   outline: none;
   font-weight: 700;
-  transition: box-shadow 0.1s ease;
+  transition: box-shadow 0.1s ease, border-color 0.1s ease;
 }
 
 .neo-input:focus {
-  box-shadow: 5px 5px 0px 0px var(--shadow-color);
+  border-color: var(--pastel-sky);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
 
 /* Badges */
@@ -83,8 +93,8 @@
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border: 3px solid var(--border-color);
-  box-shadow: 4px 4px 0px 0px var(--shadow-color);
+  border: 2.5px solid var(--border-color);
+  box-shadow: 3.5px 3.5px 0px 0px var(--shadow-color);
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
   cursor: pointer;
   user-select: none;
@@ -94,7 +104,7 @@
 
 .neo-btn:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px var(--shadow-color);
+  box-shadow: 5.5px 5.5px 0px 0px var(--shadow-color);
 }
 
 .neo-btn:active {
@@ -118,7 +128,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border: 2.5px solid var(--border-color);
+  border: 2px solid var(--border-color);
   box-shadow: 2.5px 2.5px 0px 0px var(--shadow-color);
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
   cursor: pointer;
@@ -142,7 +152,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2.5px solid var(--border-color);
+  border: 2px solid var(--border-color);
   box-shadow: 2.5px 2.5px 0px 0px var(--shadow-color);
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
   cursor: pointer;
@@ -159,80 +169,72 @@
   box-shadow: 0px 0px 0px 0px var(--shadow-color);
 }
 
-/* Button Color Presets (Grounded & High Contrast) */
+/* Button Color Presets (Dark Pastel Palette) */
 .neo-btn-primary {
-  background-color: #f59e0b;
-  color: #000000 !important;
+  background-color: var(--pastel-amber);
+  color: #12151e !important;
 }
 .neo-btn-primary:hover {
-  background-color: #fbbf24;
-  color: #000000 !important;
+  background-color: var(--pastel-amber-hover);
+  color: #12151e !important;
 }
 
 .neo-btn-secondary {
-  background-color: #0284c7;
-  color: #ffffff !important;
+  background-color: var(--pastel-sky);
+  color: #12151e !important;
 }
 .neo-btn-secondary:hover {
-  background-color: #0369a1;
-  color: #ffffff !important;
+  background-color: var(--pastel-sky-hover);
+  color: #12151e !important;
 }
 
 .neo-btn-purple {
-  background-color: #9333ea;
-  color: #ffffff !important;
+  background-color: var(--pastel-lavender);
+  color: #12151e !important;
 }
 .neo-btn-purple:hover {
-  background-color: #7e22ce;
-  color: #ffffff !important;
+  background-color: var(--pastel-lavender-hover);
+  color: #12151e !important;
 }
 
 .neo-btn-success {
-  background-color: #059669;
-  color: #ffffff !important;
+  background-color: var(--pastel-sage);
+  color: #12151e !important;
 }
 .neo-btn-success:hover {
-  background-color: #047857;
-  color: #ffffff !important;
+  background-color: var(--pastel-sage-hover);
+  color: #12151e !important;
 }
 
 .neo-btn-danger {
-  background-color: #e11d48;
-  color: #ffffff !important;
+  background-color: var(--pastel-rose);
+  color: #12151e !important;
 }
 .neo-btn-danger:hover {
-  background-color: #be123c;
-  color: #ffffff !important;
+  background-color: var(--pastel-rose-hover);
+  color: #12151e !important;
 }
 
 .neo-btn-neutral {
-  background-color: #ffffff;
-  color: #000000 !important;
+  background-color: var(--bg-elevated);
+  color: var(--text-primary) !important;
 }
 .neo-btn-neutral:hover {
-  background-color: #e2e8f0;
-  color: #000000 !important;
-}
-.dark .neo-btn-neutral {
-  background-color: #1e293b;
-  color: #ffffff !important;
-}
-.dark .neo-btn-neutral:hover {
-  background-color: #334155;
-  color: #ffffff !important;
+  background-color: #2c344a;
+  color: var(--text-primary) !important;
 }
 
-/* Markdown styling in Neo-Brutal theme */
+/* Markdown styling in Dark Pastel Neo-Brutal theme */
 .markdown-body {
   color: var(--text-primary);
   line-height: 1.7;
 }
 
 .markdown-body pre {
-  background: #090d16 !important;
-  color: #f8fafc !important;
-  border: 3px solid var(--border-color);
-  box-shadow: 4px 4px 0px 0px var(--shadow-color);
+  background: #11141d !important;
+  color: #f1f5f9 !important;
+  border: 2.5px solid var(--border-color);
+  box-shadow: 3.5px 3.5px 0px 0px var(--shadow-color);
   padding: 1rem;
   overflow-x: auto;
   margin: 1.25rem 0;
@@ -243,17 +245,12 @@
 }
 
 .markdown-body :not(pre) > code {
-  background-color: #fef3c7;
-  color: #92400e;
+  background-color: rgba(226, 179, 66, 0.15);
+  color: #f0c366;
   padding: 0.15rem 0.4rem;
   border: 1.5px solid var(--border-color);
   font-weight: 700;
   font-size: 0.875em;
-}
-
-.dark .markdown-body :not(pre) > code {
-  background-color: #451a03;
-  color: #fde68a;
 }
 
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
@@ -265,9 +262,20 @@
   color: var(--text-primary);
 }
 
-.markdown-body h1 { font-size: 1.75rem; border-bottom: 3px solid var(--border-color); padding-bottom: 0.5rem; }
-.markdown-body h2 { font-size: 1.35rem; }
-.markdown-body h3 { font-size: 1.15rem; }
+.markdown-body h1 {
+  font-size: 1.75rem;
+  border-bottom: 2.5px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  color: var(--pastel-amber);
+}
+.markdown-body h2 {
+  font-size: 1.35rem;
+  color: var(--pastel-sky);
+}
+.markdown-body h3 {
+  font-size: 1.15rem;
+  color: var(--pastel-sage);
+}
 
 .markdown-body ul, .markdown-body ol {
   padding-left: 1.75rem;
@@ -278,19 +286,20 @@
 .markdown-body ol { list-style-type: decimal; }
 
 .markdown-body blockquote {
-  border-left: 5px solid var(--border-color);
+  border-left: 4px solid var(--pastel-amber);
   padding: 0.5rem 1rem;
   margin: 1.25rem 0;
   font-weight: 600;
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(226, 179, 66, 0.08);
+  color: #cbd5e1;
 }
 
 .markdown-body a {
-  color: #0284c7;
+  color: var(--pastel-sky);
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.dark .markdown-body a {
-  color: #38bdf8;
+.markdown-body a:hover {
+  color: var(--pastel-sky-hover);
 }

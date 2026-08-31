@@ -23,7 +23,7 @@
 	let showModal = $state(false);
 	let newTitle = $state('');
 	let newCategory = $state('Backend');
-	let newColor = $state('#f59e0b');
+	let newColor = $state('#e2b342');
 	let newUrl = $state('');
 	let newNotes = $state('');
 
@@ -37,12 +37,12 @@
 	let selectedStatus = $state('all');
 
 	const colorOptions = [
-		{ label: 'Amber', value: '#f59e0b', bg: 'bg-amber-500' },
-		{ label: 'Sky', value: '#0284c7', bg: 'bg-sky-600' },
-		{ label: 'Purple', value: '#9333ea', bg: 'bg-purple-600' },
-		{ label: 'Emerald', value: '#059669', bg: 'bg-emerald-600' },
-		{ label: 'Rose', value: '#e11d48', bg: 'bg-rose-600' },
-		{ label: 'Orange', value: '#ea580c', bg: 'bg-orange-600' }
+		{ label: 'Amber', value: '#e2b342', bg: 'bg-[#e2b342]' },
+		{ label: 'Sky', value: '#64b5d6', bg: 'bg-[#64b5d6]' },
+		{ label: 'Sage', value: '#7cb98f', bg: 'bg-[#7cb98f]' },
+		{ label: 'Rose', value: '#e07a8b', bg: 'bg-[#e07a8b]' },
+		{ label: 'Lavender', value: '#ab92bf', bg: 'bg-[#ab92bf]' },
+		{ label: 'Orange', value: '#e59a68', bg: 'bg-[#e59a68]' }
 	];
 
 	const defaultCategories = ['Backend', 'Frontend', 'Database', 'DevOps', 'Mobile', 'Computer Science', 'General'];
@@ -64,19 +64,19 @@
 			case 'done':
 				return {
 					label: 'Done',
-					classes: 'bg-emerald-600 text-white border-black dark:border-white',
+					classes: 'bg-[#7cb98f] text-[#12151e] border-[#384259]',
 					icon: CheckCircle2
 				};
 			case 'in_progress':
 				return {
 					label: 'In Progress',
-					classes: 'bg-sky-600 text-white border-black dark:border-white',
+					classes: 'bg-[#64b5d6] text-[#12151e] border-[#384259]',
 					icon: Clock
 				};
 			default:
 				return {
 					label: 'To Do',
-					classes: 'bg-amber-400 text-black border-black dark:border-white',
+					classes: 'bg-[#e2b342] text-[#12151e] border-[#384259]',
 					icon: Circle
 				};
 		}
@@ -127,11 +127,11 @@
 	<!-- Page Header -->
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div>
-			<div class="neo-badge bg-amber-500 text-black mb-2">
+			<div class="neo-badge bg-[#e2b342] text-[#12151e] mb-2">
 				<BookOpen class="w-3.5 h-3.5" />
 				Learning Curriculum & Notes
 			</div>
-			<h1 class="text-3xl sm:text-4xl font-black text-black dark:text-white tracking-tight uppercase">
+			<h1 class="text-3xl sm:text-4xl font-black text-[#f1f5f9] tracking-tight uppercase">
 				Learning Topics
 			</h1>
 		</div>
@@ -147,23 +147,23 @@
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-		<div class="neo-card-sm p-4 bg-white dark:bg-slate-900">
-			<span class="text-xs font-black uppercase text-slate-600 dark:text-slate-400 tracking-wider">Total Topics</span>
-			<div class="text-3xl font-black text-black dark:text-white mt-1">{data.stats.totalMaterials}</div>
+		<div class="neo-card-sm p-4 bg-[#1a1f2c]">
+			<span class="text-xs font-black uppercase text-[#94a3b8] tracking-wider">Total Topics</span>
+			<div class="text-3xl font-black text-[#f1f5f9] mt-1">{data.stats.totalMaterials}</div>
 		</div>
-		<div class="neo-card-sm p-4 bg-amber-100 dark:bg-amber-950/40">
-			<span class="text-xs font-black uppercase text-amber-900 dark:text-amber-300 tracking-wider">To Do</span>
-			<div class="text-3xl font-black text-amber-950 dark:text-amber-200 mt-1">{data.stats.totalTodo}</div>
+		<div class="neo-card-sm p-4 bg-[#23201a] border-[#4d4022]">
+			<span class="text-xs font-black uppercase text-[#e2b342] tracking-wider">To Do</span>
+			<div class="text-3xl font-black text-[#edd078] mt-1">{data.stats.totalTodo}</div>
 		</div>
-		<div class="neo-card-sm p-4 bg-sky-100 dark:bg-sky-950/40">
-			<span class="text-xs font-black uppercase text-sky-900 dark:text-sky-300 tracking-wider">In Progress</span>
-			<div class="text-3xl font-black text-sky-950 dark:text-sky-200 mt-1">{data.stats.totalInProgress}</div>
+		<div class="neo-card-sm p-4 bg-[#18232c] border-[#294458]">
+			<span class="text-xs font-black uppercase text-[#64b5d6] tracking-wider">In Progress</span>
+			<div class="text-3xl font-black text-[#84cce6] mt-1">{data.stats.totalInProgress}</div>
 		</div>
-		<div class="neo-card-sm p-4 bg-emerald-100 dark:bg-emerald-950/40">
-			<span class="text-xs font-black uppercase text-emerald-900 dark:text-emerald-300 tracking-wider">
+		<div class="neo-card-sm p-4 bg-[#19241f] border-[#2a4a37]">
+			<span class="text-xs font-black uppercase text-[#7cb98f] tracking-wider">
 				Completed ({data.stats.overallProgress}%)
 			</span>
-			<div class="text-3xl font-black text-emerald-950 dark:text-emerald-200 mt-1">{data.stats.totalDone}</div>
+			<div class="text-3xl font-black text-[#96cca7] mt-1">{data.stats.totalDone}</div>
 		</div>
 	</div>
 
@@ -174,9 +174,9 @@
 				type="text"
 				placeholder="Search topics or note content..."
 				bind:value={searchQuery}
-				class="w-full pl-10 pr-4 py-2.5 neo-input text-xs sm:text-sm font-bold"
+				class="w-full pl-10 pr-4 py-2.5 neo-input text-xs sm:text-sm font-bold text-[#f1f5f9]"
 			/>
-			<Search class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-500 pointer-events-none" />
+			<Search class="w-4 h-4 absolute left-3.5 top-3.5 text-[#64748b] pointer-events-none" />
 		</div>
 
 		<div class="flex items-center gap-3 flex-wrap">
@@ -198,12 +198,12 @@
 
 	<!-- Materials Grid -->
 	{#if filteredMaterials.length === 0}
-		<div class="neo-card p-10 text-center bg-white dark:bg-slate-900 my-8">
-			<BookOpen class="w-12 h-12 mx-auto mb-3 text-slate-400" />
-			<h3 class="text-lg font-black uppercase text-black dark:text-white">
+		<div class="neo-card p-10 text-center bg-[#1a1f2c] my-8">
+			<BookOpen class="w-12 h-12 mx-auto mb-3 text-[#64748b]" />
+			<h3 class="text-lg font-black uppercase text-[#f1f5f9]">
 				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'No topics match your filters' : 'No Learning Topics Yet'}
 			</h3>
-			<p class="text-slate-600 dark:text-slate-400 text-sm mt-1 max-w-md mx-auto font-medium">
+			<p class="text-[#94a3b8] text-sm mt-1 max-w-md mx-auto font-medium">
 				{searchQuery || selectedCategory !== 'all' || selectedStatus !== 'all' ? 'Try adjusting your search query or filters.' : 'Start learning by creating a new topic (e.g., Golang Basics, SvelteKit 5, PostgreSQL Query).'}
 			</p>
 			{#if !searchQuery && selectedCategory === 'all' && selectedStatus === 'all'}
@@ -219,14 +219,14 @@
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 			{#each filteredMaterials as item (item.id)}
 				{@const badge = getStatusBadge(item.status)}
-				<div class="neo-card flex flex-col justify-between p-5 bg-white dark:bg-slate-900 hover:-translate-y-1 transition-transform">
+				<div class="neo-card flex flex-col justify-between p-5 bg-[#1a1f2c] hover:-translate-y-1 transition-transform">
 					<div>
 						<!-- Top Badges Row -->
 						<div class="flex items-center justify-between gap-2 mb-3">
 							<!-- Category Badge -->
 							<span
-								class="neo-badge text-black font-black"
-								style="background-color: {item.color || '#f59e0b'};"
+								class="neo-badge text-[#12151e] font-black"
+								style="background-color: {item.color || '#e2b342'};"
 							>
 								{item.category || 'General'}
 							</span>
@@ -247,7 +247,7 @@
 						</div>
 
 						<!-- Material Title -->
-						<h2 class="text-xl font-black uppercase text-black dark:text-white mb-2 leading-tight">
+						<h2 class="text-xl font-black uppercase text-[#f1f5f9] mb-2 leading-tight">
 							{item.title}
 						</h2>
 
@@ -258,7 +258,7 @@
 									href={item.url}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline"
+									class="inline-flex items-center gap-1 text-xs font-mono font-bold text-[#64b5d6] hover:text-[#84cce6] hover:underline"
 								>
 									<ExternalLink class="w-3.5 h-3.5" />
 									Documentation / Reference
@@ -267,13 +267,13 @@
 						{/if}
 
 						<!-- Notes Preview / Status -->
-						<div class="p-3 bg-slate-100 dark:bg-slate-800 border-2 border-black dark:border-white mb-4">
+						<div class="p-3 bg-[#151924] border-2 border-[#384259] mb-4">
 							{#if item.notes && item.notes.trim()}
-								<p class="text-xs font-mono text-slate-800 dark:text-slate-200 line-clamp-3 leading-relaxed font-semibold">
+								<p class="text-xs font-mono text-[#cbd5e1] line-clamp-3 leading-relaxed font-semibold">
 									{item.notes}
 								</p>
 							{:else}
-								<p class="text-xs font-mono italic text-slate-500 dark:text-slate-400">
+								<p class="text-xs font-mono italic text-[#64748b]">
 									No notes yet. Click the button below to start writing.
 								</p>
 							{/if}
@@ -281,7 +281,7 @@
 					</div>
 
 					<!-- Bottom Action Buttons -->
-					<div class="pt-3 border-t-2 border-dashed border-black/20 dark:border-white/20 flex items-center justify-between gap-3">
+					<div class="pt-3 border-t-2 border-dashed border-[#384259] flex items-center justify-between gap-3">
 						<a
 							href="/materials/{item.id}"
 							class="flex-1 neo-btn-sm neo-btn-primary flex items-center justify-center gap-1.5 py-2"
@@ -297,7 +297,7 @@
 							aria-label="Delete Topic"
 							class="neo-btn-icon neo-btn-danger"
 						>
-							<Trash2 class="w-4 h-4 text-white stroke-[2.5]" />
+							<Trash2 class="w-4 h-4 text-[#12151e] stroke-[2.5]" />
 						</button>
 					</div>
 				</div>
@@ -308,11 +308,11 @@
 
 <!-- Modal Create Material -->
 {#if showModal}
-	<div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-		<div class="w-full max-w-lg neo-card p-6 bg-white dark:bg-slate-900 animate-in zoom-in-95 duration-150">
-			<div class="flex items-center justify-between pb-3 border-b-3 border-black dark:border-white mb-5">
-				<h3 class="font-black text-xl uppercase text-black dark:text-white flex items-center gap-2">
-					<BookOpen class="w-5 h-5" />
+	<div class="fixed inset-0 z-50 bg-[#080a0f]/80 backdrop-blur-xs flex items-center justify-center p-4">
+		<div class="w-full max-w-lg neo-card p-6 bg-[#1a1f2c] border-3 border-[#384259] animate-in zoom-in-95 duration-150">
+			<div class="flex items-center justify-between pb-3 border-b-2 border-[#384259] mb-5">
+				<h3 class="font-black text-xl uppercase text-[#f1f5f9] flex items-center gap-2">
+					<BookOpen class="w-5 h-5 text-[#e2b342]" />
 					Add New Topic
 				</h3>
 				<button
@@ -338,7 +338,7 @@
 				class="space-y-4"
 			>
 				<div>
-					<label for="mat-title" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
+					<label for="mat-title" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
 						Topic Title
 					</label>
 					<input
@@ -354,7 +354,7 @@
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 					<div>
-						<label for="mat-category" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
+						<label for="mat-category" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
 							Category
 						</label>
 						<input
@@ -374,7 +374,7 @@
 					</div>
 
 					<div>
-						<span class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
+						<span class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
 							Badge Color
 						</span>
 						<div class="flex gap-1.5 pt-1">
@@ -382,7 +382,7 @@
 								<label class="cursor-pointer">
 									<input type="radio" name="color" value={c.value} bind:group={newColor} class="sr-only" />
 									<div
-										class="w-7 h-7 border-2 border-black dark:border-white shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] {c.bg} {newColor === c.value ? 'ring-2 ring-black dark:ring-white scale-110' : 'opacity-60'}"
+										class="w-7 h-7 border-2 border-[#384259] shadow-[1.5px_1.5px_0px_0px_#080a0f] {c.bg} {newColor === c.value ? 'ring-2 ring-[#f1f5f9] scale-110' : 'opacity-60'}"
 									></div>
 								</label>
 							{/each}
@@ -391,7 +391,7 @@
 				</div>
 
 				<div>
-					<label for="mat-url" class="block font-black text-xs uppercase tracking-wider text-black dark:text-white mb-1.5">
+					<label for="mat-url" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
 						Documentation / Resource URL (Optional)
 					</label>
 					<input
@@ -404,7 +404,7 @@
 					/>
 				</div>
 
-				<div class="flex justify-end gap-3 pt-3 border-t-2 border-dashed border-black/20 dark:border-white/20">
+				<div class="flex justify-end gap-3 pt-3 border-t-2 border-dashed border-[#384259]">
 					<button
 						type="button"
 						onclick={() => (showModal = false)}

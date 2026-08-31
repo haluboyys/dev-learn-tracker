@@ -38,9 +38,9 @@
 	]);
 
 	const columns: { id: 'todo' | 'in_progress' | 'done'; title: string; headerBg: string; textCol: string }[] = [
-		{ id: 'todo', title: 'TO DO', headerBg: 'bg-amber-400', textCol: 'text-black' },
-		{ id: 'in_progress', title: 'IN PROGRESS', headerBg: 'bg-sky-600', textCol: 'text-white' },
-		{ id: 'done', title: 'DONE', headerBg: 'bg-emerald-600', textCol: 'text-white' }
+		{ id: 'todo', title: 'TO DO', headerBg: 'bg-[#e2b342]', textCol: 'text-[#12151e]' },
+		{ id: 'in_progress', title: 'IN PROGRESS', headerBg: 'bg-[#64b5d6]', textCol: 'text-[#12151e]' },
+		{ id: 'done', title: 'DONE', headerBg: 'bg-[#7cb98f]', textCol: 'text-[#12151e]' }
 	];
 
 	const filteredItems = $derived(
@@ -106,11 +106,11 @@
 	<!-- Page Header & Filters Toolbar -->
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div>
-			<div class="neo-badge bg-purple-600 text-white mb-2">
+			<div class="neo-badge bg-[#ab92bf] text-[#12151e] mb-2">
 				<Kanban class="w-3.5 h-3.5" />
 				Unified Workspace Board
 			</div>
-			<h1 class="text-3xl sm:text-4xl font-black text-black dark:text-white tracking-tight uppercase">
+			<h1 class="text-3xl sm:text-4xl font-black text-[#f1f5f9] tracking-tight uppercase">
 				Kanban Board
 			</h1>
 		</div>
@@ -123,9 +123,9 @@
 					type="text"
 					placeholder="Filter cards..."
 					bind:value={searchQuery}
-					class="pl-8 pr-3 py-2 neo-input text-xs font-bold w-36 sm:w-44"
+					class="pl-8 pr-3 py-2 neo-input text-xs font-bold w-36 sm:w-44 text-[#f1f5f9]"
 				/>
-				<Search class="w-3.5 h-3.5 absolute left-2.5 top-3 text-slate-500 pointer-events-none" />
+				<Search class="w-3.5 h-3.5 absolute left-2.5 top-3 text-[#64748b] pointer-events-none" />
 			</div>
 
 			<!-- Type Filter Custom Select -->
@@ -149,25 +149,25 @@
 		{#each columns as col}
 			{@const colItems = getColumnItems(col.id)}
 			<div
-				class="neo-card bg-white dark:bg-slate-900 flex flex-col min-h-[600px] overflow-hidden"
+				class="neo-card bg-[#1a1f2c] flex flex-col min-h-[600px] overflow-hidden"
 				role="region"
 				aria-label="{col.title} Column"
 				ondragover={onDragOver}
 				ondrop={() => onDrop(col.id)}
 			>
 				<!-- Column Header -->
-				<div class="p-3.5 border-b-3 border-black dark:border-white {col.headerBg} {col.textCol} flex items-center justify-between">
+				<div class="p-3.5 border-b-2 border-[#384259] {col.headerBg} {col.textCol} flex items-center justify-between font-black">
 					<h2 class="font-black text-sm uppercase tracking-wider">{col.title}</h2>
-					<span class="w-6 h-6 bg-black text-white font-mono text-xs font-black flex items-center justify-center border border-black shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)]">
+					<span class="w-6 h-6 bg-[#12151e] text-[#f1f5f9] font-mono text-xs font-black flex items-center justify-center border border-[#384259] shadow-[1px_1px_0px_0px_#080a0f]">
 						{colItems.length}
 					</span>
 				</div>
 
 				<!-- Cards Column -->
-				<div class="p-3.5 flex-1 space-y-3.5 bg-slate-50/70 dark:bg-slate-950/50">
+				<div class="p-3.5 flex-1 space-y-3.5 bg-[#151924]">
 					{#if colItems.length === 0}
-						<div class="h-36 border-3 border-dashed border-black/20 dark:border-white/20 flex flex-col items-center justify-center p-4 text-center">
-							<span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+						<div class="h-36 border-2 border-dashed border-[#384259] flex flex-col items-center justify-center p-4 text-center">
+							<span class="text-xs font-mono font-bold text-[#64748b]">
 								Drag & drop cards here
 							</span>
 						</div>
@@ -178,18 +178,18 @@
 							draggable="true"
 							role="article"
 							ondragstart={() => onDragStart(item.id)}
-							class="neo-card-sm p-3.5 bg-white dark:bg-slate-900 cursor-grab active:cursor-grabbing hover:-translate-y-0.5 transition-transform"
+							class="neo-card-sm p-3.5 bg-[#1a1f2c] cursor-grab active:cursor-grabbing hover:-translate-y-0.5 transition-transform"
 						>
 							<!-- Top Badges -->
 							<div class="flex items-center justify-between gap-1 mb-2">
 								<div class="flex items-center gap-1.5">
 									{#if item.type === 'material'}
-										<span class="neo-badge bg-amber-400 text-black text-[10px] py-0.5 px-1.5">
+										<span class="neo-badge bg-[#e2b342] text-[#12151e] text-[10px] py-0.5 px-1.5">
 											<BookOpen class="w-3 h-3 stroke-[2.5]" />
 											Topic
 										</span>
 									{:else}
-										<span class="neo-badge bg-sky-600 text-white text-[10px] py-0.5 px-1.5">
+										<span class="neo-badge bg-[#64b5d6] text-[#12151e] text-[10px] py-0.5 px-1.5">
 											<FolderGit2 class="w-3 h-3 stroke-[2.5]" />
 											Project
 										</span>
@@ -197,31 +197,31 @@
 								</div>
 
 								<span
-									class="neo-badge text-black text-[10px] py-0.5 px-1.5 truncate max-w-[120px]"
-									style="background-color: {item.color || '#f59e0b'};"
+									class="neo-badge text-[#12151e] text-[10px] py-0.5 px-1.5 truncate max-w-[120px] font-black"
+									style="background-color: {item.color || '#e2b342'};"
 								>
 									{item.category}
 								</span>
 							</div>
 
 							<!-- Title -->
-							<h3 class="font-black text-sm uppercase text-black dark:text-white leading-tight mb-2">
+							<h3 class="font-black text-sm uppercase text-[#f1f5f9] leading-tight mb-2">
 								{item.title}
 							</h3>
 
 							{#if item.type === 'project' && item.description}
-								<p class="text-[11px] text-slate-700 dark:text-slate-300 line-clamp-2 mb-3 leading-relaxed font-semibold">
+								<p class="text-[11px] text-[#cbd5e1] line-clamp-2 mb-3 leading-relaxed font-semibold">
 									{item.description}
 								</p>
 							{/if}
 
 							<!-- Card Footer / Actions -->
-							<div class="pt-2.5 border-t border-black/15 dark:border-white/15 flex items-center justify-between">
+							<div class="pt-2.5 border-t border-[#384259] flex items-center justify-between">
 								<div class="flex items-center gap-2">
 									{#if item.type === 'material'}
 										<a
 											href="/materials/{item.id}"
-											class="text-[11px] font-black text-black dark:text-white hover:text-amber-500 flex items-center gap-1 underline underline-offset-2"
+											class="text-[11px] font-black text-[#f1f5f9] hover:text-[#e2b342] flex items-center gap-1 underline underline-offset-2"
 										>
 											<FileText class="w-3.5 h-3.5" />
 											Notes
@@ -231,7 +231,7 @@
 												href={item.url}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-mono text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-0.5"
+												class="text-[11px] font-mono text-[#64b5d6] hover:text-[#84cce6] hover:underline flex items-center gap-0.5"
 												title="Open Reference"
 											>
 												<ExternalLink class="w-3 h-3" />
@@ -243,7 +243,7 @@
 												href={item.repoUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-black text-black dark:text-white hover:underline flex items-center gap-1"
+												class="text-[11px] font-black text-[#f1f5f9] hover:text-[#e2b342] hover:underline flex items-center gap-1"
 											>
 												<GitBranch class="w-3.5 h-3.5" />
 												Repo
@@ -254,7 +254,7 @@
 												href={item.liveUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-black text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1"
+												class="text-[11px] font-black text-[#64b5d6] hover:text-[#84cce6] hover:underline flex items-center gap-1"
 											>
 												<ExternalLink class="w-3.5 h-3.5" />
 												Demo

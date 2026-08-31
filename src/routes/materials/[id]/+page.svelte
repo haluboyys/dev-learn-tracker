@@ -6,20 +6,8 @@
 		ArrowLeft,
 		Save,
 		ExternalLink,
-		CheckCircle2,
-		Clock,
-		Circle,
 		Eye,
-		Edit3,
-		Code,
-		Sparkles,
-		Columns,
-		Maximize2,
-		BookOpen,
-		Bold,
-		Italic,
-		List,
-		Link as LinkIcon
+		Edit3
 	} from 'lucide-svelte';
 
 	let { data } = $props();
@@ -84,8 +72,8 @@
 			</a>
 
 			<span
-				class="neo-badge text-black font-black"
-				style="background-color: {data.material.color || '#f59e0b'};"
+				class="neo-badge text-[#12151e] font-black"
+				style="background-color: {data.material.color || '#e2b342'};"
 			>
 				{category}
 			</span>
@@ -93,11 +81,11 @@
 
 		<!-- View Switcher (Desktop) -->
 		<div class="flex items-center gap-2">
-			<div class="flex border-3 border-black dark:border-white divide-x-3 divide-black dark:divide-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] bg-white dark:bg-slate-900">
+			<div class="flex border-2 border-[#384259] divide-x-2 divide-[#384259] shadow-[2.5px_2.5px_0px_0px_#080a0f] bg-[#1a1f2c]">
 				<button
 					type="button"
 					onclick={() => (activeTab = 'split')}
-					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'split' ? 'bg-amber-400 text-black' : 'text-black dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}"
+					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'split' ? 'bg-[#e2b342] text-[#12151e]' : 'text-[#f1f5f9] hover:bg-[#222838]'}"
 				>
 					<span class="hidden sm:inline">Split View</span>
 					<span class="sm:hidden">Split</span>
@@ -105,14 +93,14 @@
 				<button
 					type="button"
 					onclick={() => (activeTab = 'edit')}
-					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'edit' ? 'bg-amber-400 text-black' : 'text-black dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}"
+					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'edit' ? 'bg-[#e2b342] text-[#12151e]' : 'text-[#f1f5f9] hover:bg-[#222838]'}"
 				>
 					Editor
 				</button>
 				<button
 					type="button"
 					onclick={() => (activeTab = 'preview')}
-					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'preview' ? 'bg-amber-400 text-black' : 'text-black dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'}"
+					class="px-3 py-1.5 text-xs font-black uppercase cursor-pointer transition-colors {activeTab === 'preview' ? 'bg-[#e2b342] text-[#12151e]' : 'text-[#f1f5f9] hover:bg-[#222838]'}"
 				>
 					Preview
 				</button>
@@ -138,10 +126,10 @@
 		class="space-y-6"
 	>
 		<!-- Header Card -->
-		<div class="neo-card p-5 bg-white dark:bg-slate-900 flex flex-col md:flex-row md:items-center justify-between gap-4">
+		<div class="neo-card p-5 bg-[#1a1f2c] flex flex-col md:flex-row md:items-center justify-between gap-4">
 			<div class="flex-1">
 				<div class="flex items-center gap-2 mb-1">
-					<label for="material-title-input" class="text-[10px] font-mono font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+					<label for="material-title-input" class="text-[10px] font-mono font-black uppercase tracking-wider text-[#94a3b8]">
 						Topic Title
 					</label>
 				</div>
@@ -150,7 +138,7 @@
 					type="text"
 					name="title"
 					bind:value={title}
-					class="w-full font-black text-xl sm:text-2xl uppercase bg-transparent text-black dark:text-white outline-none border-b-3 border-dashed border-black/30 dark:border-white/30 focus:border-black dark:focus:border-white pb-1"
+					class="w-full font-black text-xl sm:text-2xl uppercase bg-transparent text-[#f1f5f9] outline-none border-b-2 border-dashed border-[#384259] focus:border-[#64b5d6] pb-1"
 					placeholder="Topic Title..."
 				/>
 				{#if data.material.url}
@@ -159,7 +147,7 @@
 							href={data.material.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline"
+							class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-[#64b5d6] hover:text-[#84cce6] hover:underline"
 						>
 							<ExternalLink class="w-3.5 h-3.5" />
 							{data.material.url}
@@ -193,10 +181,10 @@
 		<div class="grid grid-cols-1 {activeTab === 'split' ? 'lg:grid-cols-2' : ''} gap-6">
 			<!-- Editor Panel -->
 			{#if activeTab === 'split' || activeTab === 'edit'}
-				<div class="neo-card bg-white dark:bg-slate-900 flex flex-col h-[680px] overflow-hidden">
+				<div class="neo-card bg-[#1a1f2c] flex flex-col h-[680px] overflow-hidden">
 					<!-- Editor Toolbar -->
-					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-amber-100 dark:bg-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs font-mono font-black text-black dark:text-white">
-						<span class="flex items-center gap-1.5 uppercase">
+					<div class="px-4 py-2.5 border-b-2 border-[#384259] bg-[#222838] flex items-center justify-between flex-wrap gap-2 text-xs font-mono font-black text-[#f1f5f9]">
+						<span class="flex items-center gap-1.5 uppercase text-[#e2b342]">
 							<Edit3 class="w-4 h-4" />
 							Markdown Editor
 						</span>
@@ -207,7 +195,7 @@
 								type="button"
 								onclick={() => insertSnippet('**', '**')}
 								title="Bold Text"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] font-bold cursor-pointer transition-colors"
 							>
 								B
 							</button>
@@ -215,7 +203,7 @@
 								type="button"
 								onclick={() => insertSnippet('*', '*')}
 								title="Italic Text"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white italic font-bold cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] italic font-bold cursor-pointer transition-colors"
 							>
 								I
 							</button>
@@ -223,7 +211,7 @@
 								type="button"
 								onclick={() => insertSnippet('### ')}
 								title="Heading 3"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] font-bold cursor-pointer transition-colors"
 							>
 								H3
 							</button>
@@ -231,7 +219,7 @@
 								type="button"
 								onclick={() => insertSnippet('```typescript\n', '\n```')}
 								title="Code Block"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] font-mono cursor-pointer transition-colors"
 							>
 								&lt;/&gt;
 							</button>
@@ -239,7 +227,7 @@
 								type="button"
 								onclick={() => insertSnippet('- ')}
 								title="Bulleted List"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] font-mono cursor-pointer transition-colors"
 							>
 								• List
 							</button>
@@ -247,7 +235,7 @@
 								type="button"
 								onclick={() => insertSnippet('[', '](https://...)')}
 								title="Hyperlink"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-[#151924] hover:bg-[#e2b342] hover:text-[#12151e] text-[#f1f5f9] border border-[#384259] font-mono cursor-pointer transition-colors"
 							>
 								Link
 							</button>
@@ -259,23 +247,23 @@
 						name="notes"
 						bind:value={notes}
 						placeholder="Write notes here in Markdown... (Supports GFM, lists, code blocks ```typescript ... ``` etc.)"
-						class="flex-1 w-full p-4 sm:p-6 font-mono text-sm leading-relaxed bg-white dark:bg-slate-900 text-black dark:text-white outline-none resize-none font-medium"
+						class="flex-1 w-full p-4 sm:p-6 font-mono text-sm leading-relaxed bg-[#151924] text-[#f1f5f9] outline-none resize-none font-medium"
 					></textarea>
 				</div>
 			{/if}
 
 			<!-- Preview Panel -->
 			{#if activeTab === 'split' || activeTab === 'preview'}
-				<div class="neo-card bg-white dark:bg-slate-900 flex flex-col h-[680px] overflow-hidden">
-					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-sky-100 dark:bg-slate-800 flex items-center justify-between text-xs font-mono font-black text-black dark:text-white">
-						<span class="flex items-center gap-1.5 uppercase">
+				<div class="neo-card bg-[#1a1f2c] flex flex-col h-[680px] overflow-hidden">
+					<div class="px-4 py-2.5 border-b-2 border-[#384259] bg-[#222838] flex items-center justify-between text-xs font-mono font-black text-[#f1f5f9]">
+						<span class="flex items-center gap-1.5 uppercase text-[#64b5d6]">
 							<Eye class="w-4 h-4" />
 							Live Markdown Preview
 						</span>
-						<span class="text-[10px] font-mono opacity-70">Auto Synced</span>
+						<span class="text-[10px] font-mono text-[#94a3b8]">Auto Synced</span>
 					</div>
 
-					<div class="flex-1 p-6 overflow-y-auto markdown-body text-black dark:text-white bg-white dark:bg-slate-900">
+					<div class="flex-1 p-6 overflow-y-auto markdown-body text-[#f1f5f9] bg-[#1a1f2c]">
 						{@html htmlContent}
 					</div>
 				</div>

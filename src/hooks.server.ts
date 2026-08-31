@@ -25,14 +25,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 		throw redirect(303, '/login');
 	}
 
-	const themeCookie = event.cookies.get('theme') || 'light';
-
-	return resolve(event, {
-		transformPageChunk: ({ html }) => {
-			if (themeCookie === 'dark') {
-				return html.replace('<html lang="en">', '<html lang="en" class="dark">');
-			}
-			return html;
-		}
-	});
+	return resolve(event);
 };

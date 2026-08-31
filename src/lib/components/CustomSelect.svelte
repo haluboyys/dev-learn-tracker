@@ -81,14 +81,14 @@
 	<button
 		type="button"
 		onclick={toggleOpen}
-		class="w-full flex items-center justify-between gap-2.5 bg-white dark:bg-slate-900 text-black dark:text-white border-3 border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer font-black uppercase {size === 'sm' ? 'px-3 py-1.5 text-xs' : 'px-3.5 py-2 text-xs sm:text-sm'}"
+		class="w-full flex items-center justify-between gap-2.5 bg-[#151924] text-[#f1f5f9] border-2 border-[#384259] shadow-[2.5px_2.5px_0px_0px_#080a0f] hover:-translate-y-0.5 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none transition-all cursor-pointer font-black uppercase {size === 'sm' ? 'px-3 py-1.5 text-xs' : 'px-3.5 py-2 text-xs sm:text-sm'}"
 		aria-haspopup="listbox"
 		aria-expanded={isOpen}
 	>
 		<div class="flex items-center gap-2 truncate">
 			{#if selectedOption?.color}
 				<span
-					class="w-3 h-3 border border-black inline-block shrink-0 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+					class="w-3 h-3 border border-[#384259] inline-block shrink-0 shadow-[1px_1px_0px_0px_#080a0f]"
 					style="background-color: {selectedOption.color};"
 				></span>
 			{/if}
@@ -98,14 +98,14 @@
 		</div>
 
 		<ChevronDown
-			class="w-4 h-4 shrink-0 transition-transform duration-150 stroke-[3] text-black dark:text-white {isOpen ? 'rotate-180' : ''}"
+			class="w-4 h-4 shrink-0 transition-transform duration-150 stroke-[3] text-[#94a3b8] {isOpen ? 'rotate-180 text-[#e2b342]' : ''}"
 		/>
 	</button>
 
 	<!-- Options Dropdown Menu -->
 	{#if isOpen}
 		<div
-			class="absolute left-0 right-0 mt-1.5 z-50 min-w-[160px] max-h-60 overflow-y-auto bg-white dark:bg-slate-900 border-3 border-black dark:border-white shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] divide-y-2 divide-black/15 dark:divide-white/15 animate-in fade-in zoom-in-95 duration-100"
+			class="absolute left-0 right-0 mt-1.5 z-50 min-w-[160px] max-h-60 overflow-y-auto bg-[#1a1f2c] border-2 border-[#384259] shadow-[4px_4px_0px_0px_#080a0f] divide-y divide-[#2a3246] animate-in fade-in zoom-in-95 duration-100"
 			role="listbox"
 		>
 			{#each normalizedOptions as opt (opt.value)}
@@ -115,12 +115,12 @@
 					onclick={(e) => selectOption(opt.value, e)}
 					role="option"
 					aria-selected={isSelected}
-					class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 text-left text-xs font-black uppercase transition-colors cursor-pointer {isSelected ? 'bg-amber-400 text-black font-extrabold' : 'text-black dark:text-white hover:bg-amber-100 dark:hover:bg-slate-800'}"
+					class="w-full flex items-center justify-between gap-2 px-3.5 py-2.5 text-left text-xs font-black uppercase transition-colors cursor-pointer {isSelected ? 'bg-[#e2b342] text-[#12151e] font-black' : 'text-[#f1f5f9] hover:bg-[#222838]'}"
 				>
 					<div class="flex items-center gap-2 truncate">
 						{#if opt.color}
 							<span
-								class="w-3 h-3 border border-black inline-block shrink-0 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]"
+								class="w-3 h-3 border border-[#384259] inline-block shrink-0 shadow-[1px_1px_0px_0px_#080a0f]"
 								style="background-color: {opt.color};"
 							></span>
 						{/if}
@@ -128,7 +128,7 @@
 					</div>
 
 					{#if isSelected}
-						<Check class="w-4 h-4 shrink-0 stroke-[3] text-black" />
+						<Check class="w-4 h-4 shrink-0 stroke-[3] text-[#12151e]" />
 					{/if}
 				</button>
 			{/each}

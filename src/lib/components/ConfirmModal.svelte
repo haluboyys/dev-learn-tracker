@@ -55,7 +55,7 @@
 {#if open}
 	<!-- Backdrop Overlay -->
 	<div
-		class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 transition-opacity animate-in fade-in duration-150"
+		class="fixed inset-0 z-50 bg-[#080a0f]/80 backdrop-blur-xs flex items-center justify-center p-4 transition-opacity animate-in fade-in duration-150"
 		role="presentation"
 		onclick={(e) => {
 			if (e.target === e.currentTarget) handleCancel();
@@ -63,19 +63,19 @@
 	>
 		<!-- Modal Box -->
 		<div
-			class="w-full max-w-md neo-card bg-white dark:bg-slate-900 p-6 relative animate-in zoom-in-95 duration-150"
+			class="w-full max-w-md neo-card bg-[#1a1f2c] border-3 border-[#384259] shadow-[5px_5px_0px_0px_#080a0f] p-6 relative animate-in zoom-in-95 duration-150"
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="modal-title"
 			tabindex="-1"
 		>
 			<!-- Top Bar -->
-			<div class="flex items-center justify-between pb-3 border-b-3 border-black dark:border-white mb-4">
-				<div class="flex items-center gap-2">
-					<div class="p-1.5 bg-rose-600 text-white border-2 border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]">
+			<div class="flex items-center justify-between pb-3 border-b-2 border-[#384259] mb-4">
+				<div class="flex items-center gap-2.5">
+					<div class="p-1.5 bg-[#e07a8b] text-[#12151e] border-2 border-[#384259] shadow-[1.5px_1.5px_0px_0px_#080a0f]">
 						<AlertTriangle class="w-4 h-4 stroke-[3]" />
 					</div>
-					<h3 id="modal-title" class="font-black text-lg uppercase tracking-tight text-black dark:text-white">
+					<h3 id="modal-title" class="font-black text-lg uppercase tracking-tight text-[#f1f5f9]">
 						{title}
 					</h3>
 				</div>
@@ -85,7 +85,7 @@
 					onclick={handleCancel}
 					disabled={loading}
 					aria-label="Close Modal"
-					class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white"
+					class="neo-btn-icon neo-btn-neutral p-1 text-[#f1f5f9]"
 				>
 					<X class="w-4 h-4" />
 				</button>
@@ -93,13 +93,13 @@
 
 			<!-- Message Body -->
 			<div class="py-2 mb-6">
-				<p class="text-sm font-bold text-slate-800 dark:text-slate-200 leading-relaxed">
+				<p class="text-sm font-semibold text-[#cbd5e1] leading-relaxed">
 					{message}
 				</p>
 			</div>
 
 			<!-- Action Buttons -->
-			<div class="flex items-center justify-end gap-3 pt-3 border-t-2 border-dashed border-black/20 dark:border-white/20">
+			<div class="flex items-center justify-end gap-3 pt-3 border-t-2 border-dashed border-[#384259]">
 				<button
 					type="button"
 					onclick={handleCancel}
