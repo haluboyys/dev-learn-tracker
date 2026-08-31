@@ -13,39 +13,24 @@ function getAuthSecret(platform?: Readonly<App.Platform> | App.Platform): string
 	return (
 		platform?.env?.AUTH_SECRET ||
 		platform?.env?.ACCESS_CODE ||
-		(typeof process !== 'undefined' ? process.env?.AUTH_SECRET || process.env?.ACCESS_CODE : null) ||
 		DEFAULT_SECRET
 	);
 }
 
-// Convert string to Uint8Array with ArrayBuffer
-function strToBuf(str: string): Uint8Array<ArrayBuffer> {
-	const buf = new ArrayBuffer(str.length);
-	const view = new Uint8Array(buf);
-	for (let i = 0; i < str.length; i++) {
-		view[i] = str.charCodeAt(i);
-	}
-	return view;
-}
+// Modern Web-standard text encoder/decoder
+const textEncoder = new TextEncoder();
+const textDecoder = new TextDecoder();
 
-// UTF-8 string to ArrayBuffer
-function utf8ToBuf(str: string): Uint8Array<ArrayBuffer> {
-	const utf8 = unescape(encodeURIComponent(str));
-	return strToBuf(utf8);
-}
-
-// Convert buffer to hex string
 function bufToHex(buf: ArrayBuffer): string {
 	return Array.from(new Uint8Array(buf))
 		.map((b) => b.toString(16).padStart(2, '0'))
 		.join('');
 }
 
-// Convert hex string to Uint8Array with standard ArrayBuffer
 function hexToBuf(hex: string): Uint8Array<ArrayBuffer> {
 	const length = hex.length / 2;
-	const buf = new ArrayBuffer(length);
-	const bytes = new Uint8Array(buf);
+	const arrayBuffer = new ArrayBuffer(length);
+	const bytes = new Uint8Array(arrayBuffer);
 	for (let i = 0; i < length; i++) {
 		bytes[i] = parseInt(hex.substring(i * 2, i * 2 + 2), 16);
 	}
@@ -60,7 +45,7 @@ export async function hashPassword(password: string): Promise<string> {
 
 	const keyMaterial = await crypto.subtle.importKey(
 		'raw',
-		utf8ToBuf(password),
+		textEncoder.encode(password),
 		'PBKDF2',
 		false,
 		['deriveBits', 'deriveKey']
@@ -69,7 +54,7 @@ export async function hashPassword(password: string): Promise<string> {
 	const derivedKey = await crypto.subtle.deriveBits(
 		{
 			name: 'PBKDF2',
-			salt,
+			salt: saltBuf,
 			iterations: 100000,
 			hash: 'SHA-256'
 		},
@@ -77,42 +62,73 @@ export async function hashPassword(password: string): Promise<string> {
 		256
 	);
 
-	return `${bufToHex(salt.buffer)}:${bufToHex(derivedKey)}`;
+	return `${bufToHex(saltBuf)}:${bufToHex(derivedKey)}`;
 }
 
 export async function verifyPassword(password: string, storedHash: string): Promise<boolean> {
-	const [saltHex, keyHex] = storedHash.split(':');
-	if (!saltHex || !keyHex) return false;
+	try {
+		const [saltHex, keyHex] = storedHash.split(':');
+		if (!saltHex || !keyHex) return false;
 
-	const salt = hexToBuf(saltHex);
-	const keyMaterial = await crypto.subtle.importKey(
-		'raw',
-		utf8ToBuf(password),
-		'PBKDF2',
-		false,
-		['deriveBits', 'deriveKey']
-	);
+		const saltBytes = hexToBuf(saltHex);
+		const keyMaterial = await crypto.subtle.importKey(
+			'raw',
+			textEncoder.encode(password),
+			'PBKDF2',
+			false,
+			['deriveBits', 'deriveKey']
+		);
 
-	const derivedKey = await crypto.subtle.deriveBits(
-		{
-			name: 'PBKDF2',
-			salt,
-			iterations: 100000,
-			hash: 'SHA-256'
-		},
-		keyMaterial,
-		256
-	);
+		const derivedKey = await crypto.subtle.deriveBits(
+			{
+				name: 'PBKDF2',
+				salt: saltBytes.buffer,
+				iterations: 100000,
+				hash: 'SHA-256'
+			},
+			keyMaterial,
+			256
+		);
 
-	const computedKeyHex = bufToHex(derivedKey);
-	return computedKeyHex === keyHex;
+		const computedKeyHex = bufToHex(derivedKey);
+		return computedKeyHex === keyHex;
+	} catch (err) {
+		console.error('Password verification error:', err);
+		return false;
+	}
+}
+
+// Base64URL helper
+function base64UrlEncode(str: string): string {
+	const bytes = textEncoder.encode(str);
+	let binary = '';
+	for (let i = 0; i < bytes.byteLength; i++) {
+		binary += String.fromCharCode(bytes[i]);
+	}
+	return btoa(binary)
+		.replace(/\+/g, '-')
+		.replace(/\//g, '_')
+		.replace(/=+$/, '');
+}
+
+function base64UrlDecode(str: string): string {
+	let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+	while (base64.length % 4) {
+		base64 += '=';
+	}
+	const binary = atob(base64);
+	const bytes = new Uint8Array(binary.length);
+	for (let i = 0; i < binary.length; i++) {
+		bytes[i] = binary.charCodeAt(i);
+	}
+	return textDecoder.decode(bytes);
 }
 
 // Token Creation & Verification using Web Crypto HMAC-SHA256
 async function getHmacKey(secret: string): Promise<CryptoKey> {
 	return await crypto.subtle.importKey(
 		'raw',
-		utf8ToBuf(secret),
+		textEncoder.encode(secret),
 		{ name: 'HMAC', hash: 'SHA-256' },
 		false,
 		['sign', 'verify']
@@ -133,8 +149,8 @@ export async function createSessionToken(
 	const secret = getAuthSecret(platform);
 	const key = await getHmacKey(secret);
 
-	const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-	const signature = await crypto.subtle.sign('HMAC', key, utf8ToBuf(dataStr));
+	const dataStr = base64UrlEncode(JSON.stringify(payload));
+	const signature = await crypto.subtle.sign('HMAC', key, textEncoder.encode(dataStr));
 	const sigHex = bufToHex(signature);
 
 	return `${dataStr}.${sigHex}`;
@@ -154,13 +170,13 @@ export async function verifySessionToken(
 		const isValid = await crypto.subtle.verify(
 			'HMAC',
 			key,
-			hexToBuf(sigHex),
-			utf8ToBuf(dataStr)
+			hexToBuf(sigHex).buffer,
+			textEncoder.encode(dataStr)
 		);
 
 		if (!isValid) return null;
 
-		const json = decodeURIComponent(escape(atob(dataStr)));
+		const json = base64UrlDecode(dataStr);
 		const payload = JSON.parse(json) as UserSessionPayload;
 
 		if (payload.exp < Date.now()) {
@@ -169,17 +185,19 @@ export async function verifySessionToken(
 
 		return payload;
 	} catch (e) {
+		console.error('Session verification error:', e);
 		return null;
 	}
 }
 
 export function setSessionCookie(event: RequestEvent, token: string) {
+	const isProd = event.url.protocol === 'https:' || process.env.NODE_ENV === 'production';
 	event.cookies.set('session_auth', token, {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'lax',
 		maxAge: 60 * 60 * 24 * 30, // 30 days
-		secure: process.env.NODE_ENV === 'production'
+		secure: isProd
 	});
 }
 

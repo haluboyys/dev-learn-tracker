@@ -1,3 +1,8 @@
+-- Drop old tables that did not have user_id
+DROP TABLE IF EXISTS materials;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS topics;
+
 CREATE TABLE IF NOT EXISTS users (
 	id text PRIMARY KEY NOT NULL,
 	email text UNIQUE NOT NULL,
