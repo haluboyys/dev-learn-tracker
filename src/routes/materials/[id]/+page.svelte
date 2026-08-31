@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { renderMarkdown } from '$lib/utils/markdown';
+	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import {
 		ArrowLeft,
 		Save,
@@ -31,6 +32,12 @@
 	let saveSuccess = $state(false);
 	let activeTab = $state<'split' | 'edit' | 'preview'>('split');
 	let textareaEl = $state<HTMLTextAreaElement | null>(null);
+
+	const statusOptions = [
+		{ value: 'todo', label: 'To Do' },
+		{ value: 'in_progress', label: 'In Progress' },
+		{ value: 'done', label: 'Done' }
+	];
 
 	const htmlContent = $derived(renderMarkdown(notes));
 
@@ -78,7 +85,7 @@
 
 			<span
 				class="neo-badge text-black font-black"
-				style="background-color: {data.material.color || '#facc15'};"
+				style="background-color: {data.material.color || '#f59e0b'};"
 			>
 				{category}
 			</span>
@@ -152,7 +159,7 @@
 							href={data.material.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 hover:underline"
+							class="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline"
 						>
 							<ExternalLink class="w-3.5 h-3.5" />
 							{data.material.url}
@@ -161,17 +168,14 @@
 				{/if}
 			</div>
 
-			<div class="flex items-center gap-3 self-end md:self-center">
-				<!-- Status Selector -->
-				<select
+			<div class="flex items-center gap-3 self-end md:self-center flex-wrap">
+				<!-- Status Custom Select -->
+				<CustomSelect
 					name="status"
 					bind:value={status}
-					class="neo-input px-3 py-2 text-xs font-black uppercase cursor-pointer"
-				>
-					<option value="todo">To Do</option>
-					<option value="in_progress">In Progress</option>
-					<option value="done">Done</option>
-				</select>
+					options={statusOptions}
+					class="min-w-[140px]"
+				/>
 
 				<!-- Save Button -->
 				<button
@@ -191,7 +195,7 @@
 			{#if activeTab === 'split' || activeTab === 'edit'}
 				<div class="neo-card bg-white dark:bg-slate-900 flex flex-col h-[680px] overflow-hidden">
 					<!-- Editor Toolbar -->
-					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-amber-200 dark:bg-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs font-mono font-black text-black dark:text-white">
+					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-amber-100 dark:bg-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs font-mono font-black text-black dark:text-white">
 						<span class="flex items-center gap-1.5 uppercase">
 							<Edit3 class="w-4 h-4" />
 							Markdown Editor
@@ -203,7 +207,7 @@
 								type="button"
 								onclick={() => insertSnippet('**', '**')}
 								title="Teks Tebal"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
 							>
 								B
 							</button>
@@ -211,7 +215,7 @@
 								type="button"
 								onclick={() => insertSnippet('*', '*')}
 								title="Teks Miring"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white italic font-bold cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white italic font-bold cursor-pointer"
 							>
 								I
 							</button>
@@ -219,7 +223,7 @@
 								type="button"
 								onclick={() => insertSnippet('### ')}
 								title="Heading 3"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-bold cursor-pointer"
 							>
 								H3
 							</button>
@@ -227,7 +231,7 @@
 								type="button"
 								onclick={() => insertSnippet('```typescript\n', '\n```')}
 								title="Code Block"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
 							>
 								&lt;/&gt;
 							</button>
@@ -235,7 +239,7 @@
 								type="button"
 								onclick={() => insertSnippet('- ')}
 								title="List"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
 							>
 								• List
 							</button>
@@ -243,7 +247,7 @@
 								type="button"
 								onclick={() => insertSnippet('[', '](https://...)')}
 								title="Link"
-								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
+								class="px-2 py-1 bg-white dark:bg-slate-700 hover:bg-amber-300 dark:hover:bg-slate-600 text-black dark:text-white border border-black dark:border-white font-mono cursor-pointer"
 							>
 								Link
 							</button>
@@ -255,7 +259,7 @@
 						name="notes"
 						bind:value={notes}
 						placeholder="Tulis catatan di sini menggunakan Markdown... (Mendukung GFM, list, code block ```typescript ... ``` dll)"
-						class="flex-1 w-full p-4 sm:p-6 font-mono text-sm leading-relaxed bg-white dark:bg-slate-900 text-black dark:text-white outline-none resize-none"
+						class="flex-1 w-full p-4 sm:p-6 font-mono text-sm leading-relaxed bg-white dark:bg-slate-900 text-black dark:text-white outline-none resize-none font-medium"
 					></textarea>
 				</div>
 			{/if}
@@ -263,7 +267,7 @@
 			<!-- Preview Panel -->
 			{#if activeTab === 'split' || activeTab === 'preview'}
 				<div class="neo-card bg-white dark:bg-slate-900 flex flex-col h-[680px] overflow-hidden">
-					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-cyan-200 dark:bg-slate-800 flex items-center justify-between text-xs font-mono font-black text-black dark:text-white">
+					<div class="px-4 py-2.5 border-b-3 border-black dark:border-white bg-sky-100 dark:bg-slate-800 flex items-center justify-between text-xs font-mono font-black text-black dark:text-white">
 						<span class="flex items-center gap-1.5 uppercase">
 							<Eye class="w-4 h-4" />
 							Live Markdown Preview

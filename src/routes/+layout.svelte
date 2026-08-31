@@ -20,10 +20,10 @@
 			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 				<!-- Brand -->
 				<a href="/materials" class="flex items-center gap-2.5 font-black text-xl tracking-wider text-black dark:text-white uppercase group">
-					<div class="w-10 h-10 bg-amber-400 border-3 border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] flex items-center justify-center group-hover:rotate-6 transition-transform">
+					<div class="w-10 h-10 bg-amber-500 border-3 border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] flex items-center justify-center group-hover:rotate-6 transition-transform">
 						<Code class="w-6 h-6 text-black stroke-[3]" />
 					</div>
-					<span class="text-xl">LEARN<span class="bg-cyan-400 text-black px-2 py-0.5 ml-1.5 border-2 border-black">DEV</span></span>
+					<span class="text-xl">LEARN<span class="bg-sky-600 text-white px-2 py-0.5 ml-1.5 border-2 border-black dark:border-white">DEV</span></span>
 				</a>
 
 				<!-- Desktop Navigation -->
@@ -88,14 +88,14 @@
 				</a>
 				<a
 					href="/projects"
-					class="flex-1 py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 {$page.url.pathname.startsWith('/projects') ? 'bg-cyan-400 text-black' : 'text-black dark:text-white'}"
+					class="flex-1 py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 {$page.url.pathname.startsWith('/projects') ? 'bg-sky-600 text-white' : 'text-black dark:text-white'}"
 				>
 					<FolderGit2 class="w-4 h-4 stroke-[2.5]" />
 					Projects
 				</a>
 				<a
 					href="/kanban"
-					class="flex-1 py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 {$page.url.pathname.startsWith('/kanban') ? 'bg-purple-400 text-black' : 'text-black dark:text-white'}"
+					class="flex-1 py-2.5 text-center font-black text-xs uppercase flex items-center justify-center gap-1.5 {$page.url.pathname.startsWith('/kanban') ? 'bg-purple-600 text-white' : 'text-black dark:text-white'}"
 				>
 					<Kanban class="w-4 h-4 stroke-[2.5]" />
 					Kanban

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import CustomSelect from '$lib/components/CustomSelect.svelte';
 	import {
 		Kanban,
 		BookOpen,
@@ -9,7 +10,6 @@
 		GitBranch,
 		ArrowRight,
 		ArrowLeft,
-		Filter,
 		Search
 	} from 'lucide-svelte';
 
@@ -26,10 +26,21 @@
 	let filterCategory = $state<string>('all');
 	let searchQuery = $state<string>('');
 
+	const typeSelectOptions = [
+		{ value: 'all', label: 'Semua Tipe' },
+		{ value: 'material', label: 'Hanya Materi' },
+		{ value: 'project', label: 'Hanya Project' }
+	];
+
+	const categorySelectOptions = $derived([
+		{ value: 'all', label: 'Semua Kategori' },
+		...data.categories.map((cat: string) => ({ value: cat, label: cat }))
+	]);
+
 	const columns: { id: 'todo' | 'in_progress' | 'done'; title: string; headerBg: string; textCol: string }[] = [
 		{ id: 'todo', title: 'TO DO', headerBg: 'bg-amber-400', textCol: 'text-black' },
-		{ id: 'in_progress', title: 'IN PROGRESS', headerBg: 'bg-cyan-400', textCol: 'text-black' },
-		{ id: 'done', title: 'DONE', headerBg: 'bg-emerald-400', textCol: 'text-black' }
+		{ id: 'in_progress', title: 'IN PROGRESS', headerBg: 'bg-sky-600', textCol: 'text-white' },
+		{ id: 'done', title: 'DONE', headerBg: 'bg-emerald-600', textCol: 'text-white' }
 	];
 
 	const filteredItems = $derived(
@@ -95,7 +106,7 @@
 	<!-- Page Header & Filters Toolbar -->
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div>
-			<div class="neo-badge bg-purple-400 text-black mb-2">
+			<div class="neo-badge bg-purple-600 text-white mb-2">
 				<Kanban class="w-3.5 h-3.5" />
 				Unified Workspace Board
 			</div>
@@ -117,26 +128,19 @@
 				<Search class="w-3.5 h-3.5 absolute left-2.5 top-3 text-slate-500 pointer-events-none" />
 			</div>
 
-			<!-- Type Filter -->
-			<select
+			<!-- Type Filter Custom Select -->
+			<CustomSelect
 				bind:value={filterType}
-				class="neo-input px-3 py-2 text-xs font-black uppercase cursor-pointer"
-			>
-				<option value="all">Semua Tipe</option>
-				<option value="material">Hanya Materi</option>
-				<option value="project">Hanya Project</option>
-			</select>
+				options={typeSelectOptions}
+				class="min-w-[145px]"
+			/>
 
-			<!-- Category Filter -->
-			<select
+			<!-- Category Filter Custom Select -->
+			<CustomSelect
 				bind:value={filterCategory}
-				class="neo-input px-3 py-2 text-xs font-black uppercase cursor-pointer"
-			>
-				<option value="all">Semua Kategori</option>
-				{#each data.categories as cat}
-					<option value={cat}>{cat}</option>
-				{/each}
-			</select>
+				options={categorySelectOptions}
+				class="min-w-[160px]"
+			/>
 		</div>
 	</div>
 
@@ -185,7 +189,7 @@
 											Materi
 										</span>
 									{:else}
-										<span class="neo-badge bg-cyan-400 text-black text-[10px] py-0.5 px-1.5">
+										<span class="neo-badge bg-sky-600 text-white text-[10px] py-0.5 px-1.5">
 											<FolderGit2 class="w-3 h-3 stroke-[2.5]" />
 											Project
 										</span>
@@ -194,45 +198,41 @@
 
 								<span
 									class="neo-badge text-black text-[10px] py-0.5 px-1.5 truncate max-w-[120px]"
-									style="background-color: {item.color || '#facc15'};"
+									style="background-color: {item.color || '#f59e0b'};"
 								>
 									{item.category}
 								</span>
 							</div>
 
 							<!-- Title -->
-							<h3 class="font-black text-sm uppercase text-black dark:text-white leading-snug mb-2">
+							<h3 class="font-black text-sm uppercase text-black dark:text-white leading-tight mb-2">
 								{item.title}
 							</h3>
 
-							<!-- Description / Notes preview -->
 							{#if item.type === 'project' && item.description}
-								<p class="text-[11px] text-slate-700 dark:text-slate-300 line-clamp-2 mb-3 leading-relaxed">
+								<p class="text-[11px] text-slate-700 dark:text-slate-300 line-clamp-2 mb-3 leading-relaxed font-semibold">
 									{item.description}
-								</p>
-							{:else if item.type === 'material' && item.notes}
-								<p class="text-[11px] font-mono text-slate-600 dark:text-slate-400 line-clamp-2 mb-3 leading-relaxed">
-									{item.notes}
 								</p>
 							{/if}
 
-							<!-- Card Actions Footer -->
-							<div class="pt-2.5 border-t-2 border-dashed border-black/15 dark:border-white/15 flex items-center justify-between">
+							<!-- Card Footer / Actions -->
+							<div class="pt-2.5 border-t border-black/15 dark:border-white/15 flex items-center justify-between">
 								<div class="flex items-center gap-2">
 									{#if item.type === 'material'}
 										<a
 											href="/materials/{item.id}"
-											class="text-xs font-black text-black dark:text-white hover:text-amber-500 flex items-center gap-1 underline underline-offset-2"
+											class="text-[11px] font-black text-black dark:text-white hover:text-amber-500 flex items-center gap-1 underline underline-offset-2"
 										>
-											<FileText class="w-3.5 h-3.5 stroke-[2.5]" />
-											Notes
+											<FileText class="w-3.5 h-3.5" />
+											Catatan
 										</a>
 										{#if item.url}
 											<a
 												href={item.url}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-xs font-mono text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5"
+												class="text-[11px] font-mono text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-0.5"
+												title="Buka Referensi"
 											>
 												<ExternalLink class="w-3 h-3" />
 											</a>
@@ -243,9 +243,9 @@
 												href={item.repoUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-xs font-black text-black dark:text-white hover:underline flex items-center gap-1"
+												class="text-[11px] font-black text-black dark:text-white hover:underline flex items-center gap-1"
 											>
-												<GitBranch class="w-3.5 h-3.5 stroke-[2.5]" />
+												<GitBranch class="w-3.5 h-3.5" />
 												Repo
 											</a>
 										{/if}
@@ -254,34 +254,34 @@
 												href={item.liveUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-xs font-black text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
+												class="text-[11px] font-black text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1"
 											>
-												<ExternalLink class="w-3.5 h-3.5 stroke-[2.5]" />
+												<ExternalLink class="w-3 h-3" />
 												Demo
 											</a>
 										{/if}
 									{/if}
 								</div>
 
-								<!-- Quick Status Arrow Buttons -->
+								<!-- Move Buttons -->
 								<div class="flex items-center gap-1">
 									{#if col.id !== 'todo'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'done' ? 'in_progress' : 'todo')}
-											title="Pindah ke kolom sebelumnya"
-											class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white cursor-pointer"
+											title="Mundur status"
+											class="neo-btn-icon neo-btn-neutral p-1 text-[10px]"
 										>
-											<ArrowLeft class="w-3 h-3 stroke-[3]" />
+											<ArrowLeft class="w-3 h-3 stroke-[2.5]" />
 										</button>
 									{/if}
 
 									{#if col.id !== 'done'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'todo' ? 'in_progress' : 'done')}
-											title="Pindah ke kolom berikutnya"
-											class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white cursor-pointer"
+											title="Maju status"
+											class="neo-btn-icon neo-btn-primary p-1 text-[10px]"
 										>
-											<ArrowRight class="w-3 h-3 stroke-[3]" />
+											<ArrowRight class="w-3 h-3 stroke-[2.5]" />
 										</button>
 									{/if}
 								</div>

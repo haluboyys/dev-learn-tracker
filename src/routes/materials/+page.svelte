@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+	import CustomSelect from '$lib/components/CustomSelect.svelte';
+	import ConfirmModal from '$lib/components/ConfirmModal.svelte';
 	import {
 		Plus,
 		ExternalLink,
@@ -10,7 +13,6 @@
 		Trash2,
 		BookOpen,
 		Search,
-		Filter,
 		X,
 		ArrowRight
 	} from 'lucide-svelte';
@@ -21,9 +23,13 @@
 	let showModal = $state(false);
 	let newTitle = $state('');
 	let newCategory = $state('Backend');
-	let newColor = $state('#facc15');
+	let newColor = $state('#f59e0b');
 	let newUrl = $state('');
 	let newNotes = $state('');
+
+	// Delete Confirmation Modal State
+	let showDeleteConfirm = $state(false);
+	let itemToDelete = $state<{ id: string; title: string } | null>(null);
 
 	// Search & Filter
 	let searchQuery = $state('');
@@ -31,34 +37,46 @@
 	let selectedStatus = $state('all');
 
 	const colorOptions = [
-		{ label: 'Kuning', value: '#facc15', bg: 'bg-amber-400' },
-		{ label: 'Cyan', value: '#22d3ee', bg: 'bg-cyan-400' },
-		{ label: 'Ungu', value: '#c084fc', bg: 'bg-purple-400' },
-		{ label: 'Hijau', value: '#4ade80', bg: 'bg-emerald-400' },
-		{ label: 'Rose', value: '#fb7185', bg: 'bg-rose-400' },
-		{ label: 'Orange', value: '#fb923c', bg: 'bg-orange-400' }
+		{ label: 'Amber', value: '#f59e0b', bg: 'bg-amber-500' },
+		{ label: 'Sky', value: '#0284c7', bg: 'bg-sky-600' },
+		{ label: 'Purple', value: '#9333ea', bg: 'bg-purple-600' },
+		{ label: 'Emerald', value: '#059669', bg: 'bg-emerald-600' },
+		{ label: 'Rose', value: '#e11d48', bg: 'bg-rose-600' },
+		{ label: 'Orange', value: '#ea580c', bg: 'bg-orange-600' }
 	];
 
 	const defaultCategories = ['Backend', 'Frontend', 'Database', 'DevOps', 'Mobile', 'Computer Science', 'Umum'];
+
+	const categorySelectOptions = $derived([
+		{ value: 'all', label: 'Semua Kategori' },
+		...data.categories.map((cat: string) => ({ value: cat, label: cat }))
+	]);
+
+	const statusSelectOptions = [
+		{ value: 'all', label: 'Semua Status' },
+		{ value: 'todo', label: 'To Do' },
+		{ value: 'in_progress', label: 'In Progress' },
+		{ value: 'done', label: 'Done' }
+	];
 
 	function getStatusBadge(status: string) {
 		switch (status) {
 			case 'done':
 				return {
 					label: 'Done',
-					classes: 'bg-emerald-300 text-black border-black dark:border-white',
+					classes: 'bg-emerald-600 text-white border-black dark:border-white',
 					icon: CheckCircle2
 				};
 			case 'in_progress':
 				return {
 					label: 'In Progress',
-					classes: 'bg-cyan-300 text-black border-black dark:border-white',
+					classes: 'bg-sky-600 text-white border-black dark:border-white',
 					icon: Clock
 				};
 			default:
 				return {
 					label: 'To Do',
-					classes: 'bg-amber-300 text-black border-black dark:border-white',
+					classes: 'bg-amber-400 text-black border-black dark:border-white',
 					icon: Circle
 				};
 		}
@@ -72,13 +90,33 @@
 
 	const filteredMaterials = $derived(
 		data.materials.filter((item: any) => {
-			const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			const matchesSearch =
+				item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				(item.notes && item.notes.toLowerCase().includes(searchQuery.toLowerCase()));
 			const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
 			const matchesStatus = selectedStatus === 'all' || item.status === selectedStatus;
 			return matchesSearch && matchesCategory && matchesStatus;
 		})
 	);
+
+	function promptDelete(item: { id: string; title: string }) {
+		itemToDelete = item;
+		showDeleteConfirm = true;
+	}
+
+	async function executeDelete() {
+		if (!itemToDelete) return;
+		const formData = new FormData();
+		formData.append('id', itemToDelete.id);
+
+		await fetch('?/deleteMaterial', {
+			method: 'POST',
+			body: formData
+		});
+
+		await invalidateAll();
+		itemToDelete = null;
+	}
 </script>
 
 <svelte:head>
@@ -89,7 +127,7 @@
 	<!-- Page Header -->
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div>
-			<div class="neo-badge bg-amber-400 text-black mb-2">
+			<div class="neo-badge bg-amber-500 text-black mb-2">
 				<BookOpen class="w-3.5 h-3.5" />
 				Materi Belajar & Catatan
 			</div>
@@ -117,9 +155,9 @@
 			<span class="text-xs font-black uppercase text-amber-900 dark:text-amber-300 tracking-wider">To Do</span>
 			<div class="text-3xl font-black text-amber-950 dark:text-amber-200 mt-1">{data.stats.totalTodo}</div>
 		</div>
-		<div class="neo-card-sm p-4 bg-cyan-100 dark:bg-cyan-950/40">
-			<span class="text-xs font-black uppercase text-cyan-900 dark:text-cyan-300 tracking-wider">In Progress</span>
-			<div class="text-3xl font-black text-cyan-950 dark:text-cyan-200 mt-1">{data.stats.totalInProgress}</div>
+		<div class="neo-card-sm p-4 bg-sky-100 dark:bg-sky-950/40">
+			<span class="text-xs font-black uppercase text-sky-900 dark:text-sky-300 tracking-wider">In Progress</span>
+			<div class="text-3xl font-black text-sky-950 dark:text-sky-200 mt-1">{data.stats.totalInProgress}</div>
 		</div>
 		<div class="neo-card-sm p-4 bg-emerald-100 dark:bg-emerald-950/40">
 			<span class="text-xs font-black uppercase text-emerald-900 dark:text-emerald-300 tracking-wider">
@@ -141,26 +179,20 @@
 			<Search class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-500 pointer-events-none" />
 		</div>
 
-		<div class="flex items-center gap-3">
-			<select
+		<div class="flex items-center gap-3 flex-wrap">
+			<!-- Custom Select for Category -->
+			<CustomSelect
 				bind:value={selectedCategory}
-				class="neo-input px-3 py-2.5 text-xs font-black uppercase cursor-pointer"
-			>
-				<option value="all">Semua Kategori</option>
-				{#each data.categories as cat}
-					<option value={cat}>{cat}</option>
-				{/each}
-			</select>
+				options={categorySelectOptions}
+				class="min-w-[160px]"
+			/>
 
-			<select
+			<!-- Custom Select for Status -->
+			<CustomSelect
 				bind:value={selectedStatus}
-				class="neo-input px-3 py-2.5 text-xs font-black uppercase cursor-pointer"
-			>
-				<option value="all">Semua Status</option>
-				<option value="todo">To Do</option>
-				<option value="in_progress">In Progress</option>
-				<option value="done">Done</option>
-			</select>
+				options={statusSelectOptions}
+				class="min-w-[150px]"
+			/>
 		</div>
 	</div>
 
@@ -194,7 +226,7 @@
 							<!-- Category Badge -->
 							<span
 								class="neo-badge text-black font-black"
-								style="background-color: {item.color || '#facc15'};"
+								style="background-color: {item.color || '#f59e0b'};"
 							>
 								{item.category || 'Umum'}
 							</span>
@@ -226,7 +258,7 @@
 									href={item.url}
 									target="_blank"
 									rel="noopener noreferrer"
-									class="inline-flex items-center gap-1 text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 hover:underline"
+									class="inline-flex items-center gap-1 text-xs font-mono font-bold text-sky-700 dark:text-sky-400 hover:underline"
 								>
 									<ExternalLink class="w-3.5 h-3.5" />
 									Dokumentasi / Referensi
@@ -237,7 +269,7 @@
 						<!-- Notes Preview / Status -->
 						<div class="p-3 bg-slate-100 dark:bg-slate-800 border-2 border-black dark:border-white mb-4">
 							{#if item.notes && item.notes.trim()}
-								<p class="text-xs font-mono text-slate-700 dark:text-slate-300 line-clamp-3 leading-relaxed">
+								<p class="text-xs font-mono text-slate-800 dark:text-slate-200 line-clamp-3 leading-relaxed font-semibold">
 									{item.notes}
 								</p>
 							{:else}
@@ -259,25 +291,14 @@
 							<ArrowRight class="w-3.5 h-3.5 stroke-[2.5]" />
 						</a>
 
-						<form
-							method="POST"
-							action="?/deleteMaterial"
-							use:enhance
-							onsubmit={(e) => {
-								if (!confirm(`Hapus materi "${item.title}" beserta catatannya?`)) {
-									e.preventDefault();
-								}
-							}}
+						<button
+							type="button"
+							onclick={() => promptDelete({ id: item.id, title: item.title })}
+							aria-label="Hapus Materi"
+							class="neo-btn-icon neo-btn-danger"
 						>
-							<input type="hidden" name="id" value={item.id} />
-							<button
-								type="submit"
-								aria-label="Hapus Materi"
-								class="neo-btn-icon neo-btn-danger"
-							>
-								<Trash2 class="w-4 h-4 text-black stroke-[2.5]" />
-							</button>
-						</form>
+							<Trash2 class="w-4 h-4 text-white stroke-[2.5]" />
+						</button>
 					</div>
 				</div>
 			{/each}
@@ -287,8 +308,8 @@
 
 <!-- Modal Create Material -->
 {#if showModal}
-	<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-		<div class="w-full max-w-lg neo-card p-6 bg-white dark:bg-slate-900">
+	<div class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
+		<div class="w-full max-w-lg neo-card p-6 bg-white dark:bg-slate-900 animate-in zoom-in-95 duration-150">
 			<div class="flex items-center justify-between pb-3 border-b-3 border-black dark:border-white mb-5">
 				<h3 class="font-black text-xl uppercase text-black dark:text-white flex items-center gap-2">
 					<BookOpen class="w-5 h-5" />
@@ -383,7 +404,7 @@
 					/>
 				</div>
 
-				<div class="flex justify-end gap-3 pt-3">
+				<div class="flex justify-end gap-3 pt-3 border-t-2 border-dashed border-black/20 dark:border-white/20">
 					<button
 						type="button"
 						onclick={() => (showModal = false)}
@@ -402,3 +423,14 @@
 		</div>
 	</div>
 {/if}
+
+<!-- Custom Delete Confirmation Modal -->
+<ConfirmModal
+	bind:open={showDeleteConfirm}
+	title="Hapus Materi?"
+	message={`Apakah kamu yakin ingin menghapus materi "${itemToDelete?.title || ''}" beserta seluruh catatannya? Tindakan ini tidak dapat dibatalkan.`}
+	confirmLabel="Ya, Hapus Materi"
+	cancelLabel="Batal"
+	variant="danger"
+	onconfirm={executeDelete}
+/>

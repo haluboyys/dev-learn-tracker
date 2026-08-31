@@ -2,19 +2,19 @@
 
 @layer base {
   :root {
-    --bg-page: #f8fafc;
+    --bg-page: #f1f5f9;
     --bg-surface: #ffffff;
-    --text-primary: #0f172a;
+    --text-primary: #090d16;
     --border-color: #000000;
     --shadow-color: #000000;
   }
 
   .dark {
-    --bg-page: #0b0f19;
-    --bg-surface: #1e293b;
+    --bg-page: #090d16;
+    --bg-surface: #141c2e;
     --text-primary: #f8fafc;
-    --border-color: #ffffff;
-    --shadow-color: #ffffff;
+    --border-color: #f1f5f9;
+    --shadow-color: #f8fafc;
   }
 
   body {
@@ -31,19 +31,19 @@
 /* Cards & Containers */
 .neo-card {
   background-color: var(--bg-surface);
-  border: 4px solid var(--border-color);
-  box-shadow: 6px 6px 0px 0px var(--shadow-color);
+  border: 3.5px solid var(--border-color);
+  box-shadow: 5px 5px 0px 0px var(--shadow-color);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .neo-card-sm {
   background-color: var(--bg-surface);
-  border: 3px solid var(--border-color);
-  box-shadow: 4px 4px 0px 0px var(--shadow-color);
+  border: 2.5px solid var(--border-color);
+  box-shadow: 3.5px 3.5px 0px 0px var(--shadow-color);
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* Inputs & Dropdowns */
+/* Inputs & Custom Dropdowns */
 .neo-input {
   background-color: var(--bg-surface);
   color: var(--text-primary);
@@ -143,7 +143,7 @@
   align-items: center;
   justify-content: center;
   border: 2.5px solid var(--border-color);
-  box-shadow: 3px 3px 0px 0px var(--shadow-color);
+  box-shadow: 2.5px 2.5px 0px 0px var(--shadow-color);
   transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.08s ease;
   cursor: pointer;
   padding: 0.5rem;
@@ -151,7 +151,7 @@
 
 .neo-btn-icon:hover {
   transform: translate(-1.5px, -1.5px);
-  box-shadow: 4.5px 4.5px 0px 0px var(--shadow-color);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
 }
 
 .neo-btn-icon:active {
@@ -159,50 +159,50 @@
   box-shadow: 0px 0px 0px 0px var(--shadow-color);
 }
 
-/* Button Color Presets (High Contrast Guarantees) */
+/* Button Color Presets (Grounded & High Contrast) */
 .neo-btn-primary {
-  background-color: #facc15;
+  background-color: #f59e0b;
   color: #000000 !important;
 }
 .neo-btn-primary:hover {
-  background-color: #fde047;
+  background-color: #fbbf24;
   color: #000000 !important;
 }
 
 .neo-btn-secondary {
-  background-color: #22d3ee;
-  color: #000000 !important;
+  background-color: #0284c7;
+  color: #ffffff !important;
 }
 .neo-btn-secondary:hover {
-  background-color: #67e8f9;
-  color: #000000 !important;
+  background-color: #0369a1;
+  color: #ffffff !important;
 }
 
 .neo-btn-purple {
-  background-color: #c084fc;
-  color: #000000 !important;
+  background-color: #9333ea;
+  color: #ffffff !important;
 }
 .neo-btn-purple:hover {
-  background-color: #d8b4fe;
-  color: #000000 !important;
+  background-color: #7e22ce;
+  color: #ffffff !important;
 }
 
 .neo-btn-success {
-  background-color: #4ade80;
-  color: #000000 !important;
+  background-color: #059669;
+  color: #ffffff !important;
 }
 .neo-btn-success:hover {
-  background-color: #86efac;
-  color: #000000 !important;
+  background-color: #047857;
+  color: #ffffff !important;
 }
 
 .neo-btn-danger {
-  background-color: #fb7185;
-  color: #000000 !important;
+  background-color: #e11d48;
+  color: #ffffff !important;
 }
 .neo-btn-danger:hover {
-  background-color: #fda4af;
-  color: #000000 !important;
+  background-color: #be123c;
+  color: #ffffff !important;
 }
 
 .neo-btn-neutral {
@@ -210,7 +210,7 @@
   color: #000000 !important;
 }
 .neo-btn-neutral:hover {
-  background-color: #f1f5f9;
+  background-color: #e2e8f0;
   color: #000000 !important;
 }
 .dark .neo-btn-neutral {
@@ -229,7 +229,7 @@
 }
 
 .markdown-body pre {
-  background: #0f172a !important;
+  background: #090d16 !important;
   color: #f8fafc !important;
   border: 3px solid var(--border-color);
   box-shadow: 4px 4px 0px 0px var(--shadow-color);
@@ -243,8 +243,8 @@
 }
 
 .markdown-body :not(pre) > code {
-  background-color: #fef08a;
-  color: #854d0e;
+  background-color: #fef3c7;
+  color: #92400e;
   padding: 0.15rem 0.4rem;
   border: 1.5px solid var(--border-color);
   font-weight: 700;
@@ -252,8 +252,8 @@
 }
 
 .dark .markdown-body :not(pre) > code {
-  background-color: #713f12;
-  color: #fef08a;
+  background-color: #451a03;
+  color: #fde68a;
 }
 
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
@@ -282,7 +282,7 @@
   padding: 0.5rem 1rem;
   margin: 1.25rem 0;
   font-weight: 600;
-  background: rgba(250, 204, 21, 0.15);
+  background: rgba(245, 158, 11, 0.12);
 }
 
 .markdown-body a {

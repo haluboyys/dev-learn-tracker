@@ -30,13 +30,13 @@
 	<!-- Login Card -->
 	<div class="w-full max-w-md neo-card p-6 sm:p-8 bg-white dark:bg-slate-900">
 		<!-- Header Banner -->
-		<div class="neo-badge bg-amber-400 text-black mb-4">
+		<div class="neo-badge bg-amber-500 text-black mb-4">
 			<Terminal class="w-3.5 h-3.5" />
 			Personal Dev Hub
 		</div>
 
 		<h1 class="text-3xl font-black uppercase tracking-tight text-black dark:text-white mb-2 flex items-center gap-2">
-			LEARN<span class="bg-cyan-400 text-black px-2 py-0.5 border-2 border-black">DEV</span>
+			LEARN<span class="bg-sky-600 text-white px-2 py-0.5 border-2 border-black dark:border-white">DEV</span>
 		</h1>
 		<p class="text-slate-700 dark:text-slate-300 text-sm font-bold mb-6">
 			Masukkan access code untuk membuka tracker pembelajaran kamu.
