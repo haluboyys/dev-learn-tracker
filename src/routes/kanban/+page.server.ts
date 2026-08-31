@@ -1,18 +1,24 @@
 import { getDb } from '$lib/server/db';
 import { materials, projects } from '$lib/server/db/schema';
-import { desc, asc, eq } from 'drizzle-orm';
+import { desc, asc, eq, and } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ platform }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
+	const user = locals.user!;
 	const db = getDb(platform);
 
 	const allMaterials = await db
 		.select()
 		.from(materials)
+		.where(eq(materials.userId, user.id))
 		.orderBy(asc(materials.order), desc(materials.createdAt));
 
-	const allProjects = await db.select().from(projects).orderBy(desc(projects.createdAt));
+	const allProjects = await db
+		.select()
+		.from(projects)
+		.where(eq(projects.userId, user.id))
+		.orderBy(desc(projects.createdAt));
 
 	// Enrich items
 	const unifiedMaterials = allMaterials.map((m: any) => ({
@@ -20,7 +26,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 		type: 'material' as const,
 		title: m.title,
 		category: m.category || 'Topic',
-		color: m.color || '#facc15',
+		color: m.color || '#e2b342',
 		status: m.status as 'todo' | 'in_progress' | 'done',
 		url: m.url,
 		notes: m.notes
@@ -31,7 +37,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 		type: 'project' as const,
 		title: p.title,
 		category: p.category || 'Project',
-		color: p.color || '#22d3ee',
+		color: p.color || '#64b5d6',
 		status: p.status as 'todo' | 'in_progress' | 'done',
 		description: p.description,
 		repoUrl: p.repoUrl,
@@ -48,7 +54,8 @@ export const load: PageServerLoad = async ({ platform }) => {
 };
 
 export const actions: Actions = {
-	moveItem: async ({ request, platform }) => {
+	moveItem: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		const type = data.get('type')?.toString();
@@ -64,12 +71,12 @@ export const actions: Actions = {
 			await db
 				.update(materials)
 				.set({ status: newStatus, updatedAt: new Date() })
-				.where(eq(materials.id, id));
+				.where(and(eq(materials.id, id), eq(materials.userId, user.id)));
 		} else if (type === 'project') {
 			await db
 				.update(projects)
 				.set({ status: newStatus, updatedAt: new Date() })
-				.where(eq(projects.id, id));
+				.where(and(eq(projects.id, id), eq(projects.userId, user.id)));
 		}
 
 		return { success: true };

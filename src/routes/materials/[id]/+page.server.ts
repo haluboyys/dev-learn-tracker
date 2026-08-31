@@ -1,12 +1,17 @@
 import { getDb } from '$lib/server/db';
 import { materials } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
-import { error, fail } from '@sveltejs/kit';
+import { eq, and } from 'drizzle-orm';
+import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params, platform }) => {
+export const load: PageServerLoad = async ({ params, locals, platform }) => {
+	const user = locals.user!;
 	const db = getDb(platform);
-	const materialList = await db.select().from(materials).where(eq(materials.id, params.id)).limit(1);
+	const materialList = await db
+		.select()
+		.from(materials)
+		.where(and(eq(materials.id, params.id), eq(materials.userId, user.id)))
+		.limit(1);
 
 	if (!materialList || materialList.length === 0) {
 		throw error(404, 'Material topic not found');
@@ -18,7 +23,8 @@ export const load: PageServerLoad = async ({ params, platform }) => {
 };
 
 export const actions: Actions = {
-	saveNotes: async ({ params, request, platform }) => {
+	saveNotes: async ({ params, request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const notes = data.get('notes')?.toString() ?? '';
 		const title = data.get('title')?.toString()?.trim();
@@ -35,7 +41,7 @@ export const actions: Actions = {
 				...(status ? { status } : {}),
 				updatedAt: new Date()
 			})
-			.where(eq(materials.id, params.id));
+			.where(and(eq(materials.id, params.id), eq(materials.userId, user.id)));
 
 		return { success: true };
 	}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { KeyRound, Sparkles, Terminal } from 'lucide-svelte';
+	import { Mail, Lock, Sparkles, Terminal, ArrowRight } from 'lucide-svelte';
 
 	let { form } = $props();
 	let loading = $state(false);
@@ -23,7 +23,7 @@
 					Personal Hub
 				</h1>
 				<p class="text-[#94a3b8] text-xs font-bold">
-					Enter access code to continue
+					Sign in to your learning account
 				</p>
 			</div>
 		</div>
@@ -44,38 +44,58 @@
 					await update();
 				};
 			}}
-			class="space-y-5"
+			class="space-y-4"
 		>
 			<div>
-				<label for="code" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
-					Access Code
+				<label for="email" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+					Email Address
+				</label>
+				<div class="relative">
+					<input
+						type="email"
+						id="email"
+						name="email"
+						required
+						placeholder="you@example.com"
+						class="w-full px-4 py-3 neo-input font-bold text-[#f1f5f9]"
+					/>
+					<Mail class="w-4 h-4 absolute right-3.5 top-4 text-[#64748b] pointer-events-none" />
+				</div>
+			</div>
+
+			<div>
+				<label for="password" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+					Password
 				</label>
 				<div class="relative">
 					<input
 						type="password"
-						id="code"
-						name="code"
+						id="password"
+						name="password"
 						required
 						placeholder="••••••••"
 						class="w-full px-4 py-3 neo-input font-mono font-bold text-[#f1f5f9]"
 					/>
-					<KeyRound class="w-5 h-5 absolute right-3.5 top-3.5 text-[#64748b] pointer-events-none" />
+					<Lock class="w-4 h-4 absolute right-3.5 top-4 text-[#64748b] pointer-events-none" />
 				</div>
 			</div>
 
 			<button
 				type="submit"
 				disabled={loading}
-				class="w-full neo-btn neo-btn-primary py-3.5 text-sm font-black flex items-center justify-center gap-2"
+				class="w-full neo-btn neo-btn-primary py-3.5 text-sm font-black flex items-center justify-center gap-2 mt-2"
 			>
 				<Sparkles class="w-4 h-4 stroke-[2.5]" />
-				{loading ? 'VERIFYING...' : 'SIGN IN TO TRACKER'}
+				{loading ? 'AUTHENTICATING...' : 'SIGN IN'}
 			</button>
 		</form>
 
 		<div class="mt-6 pt-4 border-t-2 border-dashed border-[#384259] text-center">
-			<span class="text-xs font-mono text-[#94a3b8]">
-				Default access code: <strong class="text-[#f1f5f9] font-black bg-[#222838] px-1.5 py-0.5 border border-[#384259]">belajarcoding</strong>
+			<span class="text-xs text-[#94a3b8]">
+				Don't have an account?
+				<a href="/register" class="text-[#e2b342] font-black hover:underline ml-1 inline-flex items-center gap-1">
+					Create account <ArrowRight class="w-3 h-3" />
+				</a>
 			</span>
 		</div>
 	</div>

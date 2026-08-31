@@ -1,11 +1,11 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/stores';
-	import { BookOpen, FolderGit2, Kanban, LogOut, Code } from 'lucide-svelte';
+	import { BookOpen, FolderGit2, Kanban, LogOut, Code, User } from 'lucide-svelte';
 
-	let { children } = $props();
+	let { data, children } = $props();
 
-	const isAuthPage = $derived($page.url.pathname === '/login');
+	const isAuthPage = $derived($page.url.pathname === '/login' || $page.url.pathname === '/register');
 </script>
 
 <div class="min-h-screen flex flex-col bg-[#12151e] text-[#f1f5f9]">
@@ -44,8 +44,15 @@
 					</a>
 				</nav>
 
-				<!-- Controls -->
+				<!-- Controls & User Badge -->
 				<div class="flex items-center gap-3">
+					{#if data.user}
+						<div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-[#1a1f2c] border-2 border-[#384259] text-xs font-bold text-[#f1f5f9]">
+							<User class="w-3.5 h-3.5 text-[#e2b342]" />
+							<span class="max-w-[120px] truncate">{data.user.name}</span>
+						</div>
+					{/if}
+
 					<form method="POST" action="/logout">
 						<button
 							type="submit"

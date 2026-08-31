@@ -1,6 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db';
+import { verifySessionToken } from '$lib/server/auth';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	// Initialize / ensure DB schema
@@ -13,11 +14,27 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	const sessionToken = event.cookies.get('session_auth');
-	const isAuth = sessionToken === 'authenticated';
+	let user = null;
+
+	if (sessionToken) {
+		const payload = await verifySessionToken(sessionToken, event.platform);
+		if (payload) {
+			user = {
+				id: payload.userId,
+				email: payload.email,
+				name: payload.name
+			};
+		}
+	}
+
+	event.locals.user = user;
+	const isAuth = !!user;
 	const pathname = event.url.pathname;
 
 	// Public routes
-	if (pathname === '/login') {
+	const isPublicRoute = pathname === '/login' || pathname === '/register';
+
+	if (isPublicRoute) {
 		if (isAuth) {
 			throw redirect(303, '/materials');
 		}

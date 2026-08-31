@@ -1,42 +1,52 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { getDb } from '$lib/server/db';
+import { users } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
+import { verifyPassword, createSessionToken, setSessionCookie } from '$lib/server/auth';
 
-export const load: PageServerLoad = async ({ cookies }) => {
-	const isAuth = cookies.get('session_auth') === 'authenticated';
-	if (isAuth) {
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
 		throw redirect(303, '/materials');
 	}
 	return {};
 };
 
 export const actions: Actions = {
-	login: async ({ request, cookies, platform }) => {
+	login: async (event) => {
+		const { request, platform } = event;
 		const data = await request.formData();
-		const code = data.get('code')?.toString()?.trim();
+		const email = data.get('email')?.toString()?.trim().toLowerCase();
+		const password = data.get('password')?.toString()?.trim();
 
-		const expectedCode = platform?.env?.ACCESS_CODE || process.env.ACCESS_CODE || 'belajarcoding';
-
-		if (!code) {
-			return fail(400, { error: 'Access code is required!' });
+		if (!email || !password) {
+			return fail(400, { error: 'Email and password are required' });
 		}
 
-		if (code !== expectedCode) {
-			return fail(401, { error: 'Invalid access code!' });
+		const db = getDb(platform);
+		const existingUserList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+
+		if (existingUserList.length === 0) {
+			return fail(401, { error: 'Invalid email or password' });
 		}
 
-		// Set cookie
-		cookies.set('session_auth', 'authenticated', {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'lax',
-			maxAge: 60 * 60 * 24 * 30, // 30 days
-			secure: process.env.NODE_ENV === 'production'
-		});
+		const user = existingUserList[0];
+		const passwordValid = await verifyPassword(password, user.passwordHash);
 
+		if (!passwordValid) {
+			return fail(401, { error: 'Invalid email or password' });
+		}
+
+		const token = await createSessionToken(
+			{
+				id: user.id,
+				email: user.email,
+				name: user.name
+			},
+			platform
+		);
+
+		setSessionCookie(event, token);
 		throw redirect(303, '/materials');
-	},
-	logout: async ({ cookies }) => {
-		cookies.delete('session_auth', { path: '/' });
-		throw redirect(303, '/login');
 	}
 };

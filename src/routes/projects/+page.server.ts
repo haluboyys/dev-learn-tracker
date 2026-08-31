@@ -1,14 +1,19 @@
 import { getDb } from '$lib/server/db';
 import { projects } from '$lib/server/db/schema';
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, and } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ platform }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
+	const user = locals.user!;
 	const db = getDb(platform);
 
-	const allProjects = await db.select().from(projects).orderBy(desc(projects.createdAt));
+	const allProjects = await db
+		.select()
+		.from(projects)
+		.where(eq(projects.userId, user.id))
+		.orderBy(desc(projects.createdAt));
 
 	const stats = {
 		total: allProjects.length,
@@ -27,12 +32,13 @@ export const load: PageServerLoad = async ({ platform }) => {
 };
 
 export const actions: Actions = {
-	createProject: async ({ request, platform }) => {
+	createProject: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const title = data.get('title')?.toString()?.trim();
 		const description = data.get('description')?.toString()?.trim() || '';
 		const category = data.get('category')?.toString()?.trim() || 'Project';
-		const color = data.get('color')?.toString()?.trim() || '#22d3ee';
+		const color = data.get('color')?.toString()?.trim() || '#64b5d6';
 		const repoUrl = data.get('repoUrl')?.toString()?.trim() || null;
 		const liveUrl = data.get('liveUrl')?.toString()?.trim() || null;
 		const status = (data.get('status')?.toString() as 'todo' | 'in_progress' | 'done') || 'todo';
@@ -44,6 +50,7 @@ export const actions: Actions = {
 		const db = getDb(platform);
 		await db.insert(projects).values({
 			id: nanoid(10),
+			userId: user.id,
 			title,
 			description,
 			category,
@@ -58,7 +65,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	updateStatus: async ({ request, platform }) => {
+	updateStatus: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		const status = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
@@ -74,18 +82,22 @@ export const actions: Actions = {
 				status,
 				updatedAt: new Date()
 			})
-			.where(eq(projects.id, id));
+			.where(and(eq(projects.id, id), eq(projects.userId, user.id)));
 
 		return { success: true };
 	},
 
-	deleteProject: async ({ request, platform }) => {
+	deleteProject: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		if (!id) return fail(400, { error: 'Invalid ID' });
 
 		const db = getDb(platform);
-		await db.delete(projects).where(eq(projects.id, id));
+		await db
+			.delete(projects)
+			.where(and(eq(projects.id, id), eq(projects.userId, user.id)));
+
 		return { success: true };
 	}
 };

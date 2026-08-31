@@ -2,7 +2,7 @@
 
 A personal developer learning hub and practice tracker built with SvelteKit 5, TypeScript, Tailwind CSS v4, and Cloudflare D1 (SQLite).
 
-Designed with a high-contrast Dark Pastel Neo-Brutalism interface.
+Designed with a high-contrast Dark Pastel Neo-Brutalism interface and multi-user authentication support.
 
 ---
 
@@ -10,13 +10,16 @@ Designed with a high-contrast Dark Pastel Neo-Brutalism interface.
 
 DEVTRACK is a lightweight, zero-maintenance web application for organizing personal coding studies, tracking reference notes, managing practice projects, and prioritizing learning workflows using an integrated Kanban board.
 
+Each user registers and signs in to access their own isolated workspace of learning topics, notes, and practice projects.
+
 The application is architected to run entirely on Cloudflare's free tier (Pages + D1 Database) with zero ongoing hosting costs.
 
 ---
 
 ## Key Features
 
-- **Passcode Authentication**: Simple, single-secret access gate without third-party OAuth complexity.
+- **Multi-User Authentication**: Register & Sign In system with Web Crypto PBKDF2 password hashing and HMAC-SHA256 signed session cookies.
+- **User Data Isolation**: Learning topics, markdown notes, and practice projects are securely scoped per user.
 - **Topic & Material Management**: Direct topic tracking with status workflows (`To Do`, `In Progress`, `Done`), external documentation links, and categorized tags.
 - **Markdown Notes Workspace**: Split-screen editor with live preview, keyboard shortcuts (`Cmd+S` / `Ctrl+S`), and Prism.js syntax highlighting across multiple programming languages.
 - **Practice Projects Tracker**: Portfolio and experiment log with links to source repositories and live deployments.
@@ -32,6 +35,7 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
 - **Deployment Adapter**: `@sveltejs/adapter-cloudflare`
 - **Styling**: Tailwind CSS v4
 - **Database & ORM**: Cloudflare D1 (SQLite) + Drizzle ORM
+- **Authentication**: Web Crypto API (PBKDF2 + HMAC-SHA256)
 - **Markdown & Highlighting**: Marked + PrismJS
 - **Icons**: Lucide Svelte
 
@@ -61,8 +65,7 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
    bun run dev
    ```
 
-4. Open `http://localhost:5173` in your browser.  
-   Default local access code: `belajarcoding` (Configurable via `ACCESS_CODE` environment variable).
+4. Open `http://localhost:5173` in your browser to register and create your account.
 
 ---
 
@@ -105,13 +108,13 @@ bun run build
 bunx wrangler pages deploy .svelte-kit/cloudflare --project-name learn-dev-tracker
 ```
 
-### 5. Set Production Access Secret
+### 5. Set Auth Secret (Optional)
 
 In the Cloudflare Dashboard:
 1. Navigate to **Workers & Pages** > **learn-dev-tracker** > **Settings** > **Environment Variables**.
-2. Add a variable:
-   - **Name**: `ACCESS_CODE`
-   - **Value**: `<your-custom-secret-passcode>`
+2. Add an optional secret for token signing:
+   - **Name**: `AUTH_SECRET`
+   - **Value**: `<your-random-strong-secret>`
 
 ---
 
@@ -122,19 +125,22 @@ In the Cloudflare Dashboard:
 ├── src/
 │   ├── app.css                  # Tailwind v4 configuration & theme tokens
 │   ├── app.html                 # Base HTML shell with theme initialization script
-│   ├── hooks.server.ts          # Authentication guards & SSR theme handler
+│   ├── hooks.server.ts          # Multi-user session verification & route guards
 │   ├── lib/
 │   │   ├── components/          # Reusable components (CustomSelect, ConfirmModal)
-│   │   ├── server/db/           # Drizzle schema definitions & D1 connection
-│   │   ├── stores/              # Svelte client stores (theme persistence)
+│   │   ├── server/
+│   │   │   ├── auth.ts          # Web Crypto PBKDF2 hashing & HMAC session tokens
+│   │   │   └── db/              # Drizzle schema definitions & D1 connection
 │   │   └── utils/               # Markdown renderer & syntax highlighting setup
 │   └── routes/
-│       ├── +layout.svelte       # Main layout & navigation header
-│       ├── login/               # Access code verification page
-│       ├── materials/           # Topic management & list view
+│       ├── +layout.svelte       # Main layout, user profile badge & navigation header
+│       ├── login/               # Email/password login page
+│       ├── register/            # New user registration page
+│       ├── logout/              # Sign-out server endpoint
+│       ├── materials/           # User-scoped learning topics & list view
 │       │   └── [id]/            # Markdown notes editor & viewer
-│       ├── projects/            # Practice projects tracker
-│       └── kanban/              # Drag-and-drop Kanban board
+│       ├── projects/            # User-scoped practice projects tracker
+│       └── kanban/              # User-scoped drag-and-drop Kanban board
 ├── static/                      # Static assets & favicon
 └── wrangler.toml                # Cloudflare deployment & D1 binding configuration
 ```

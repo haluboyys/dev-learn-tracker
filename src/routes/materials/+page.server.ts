@@ -1,16 +1,18 @@
 import { getDb } from '$lib/server/db';
 import { materials } from '$lib/server/db/schema';
-import { desc, asc, eq } from 'drizzle-orm';
+import { desc, asc, eq, and } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ platform }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
+	const user = locals.user!;
 	const db = getDb(platform);
 
 	const allMaterials = await db
 		.select()
 		.from(materials)
+		.where(eq(materials.userId, user.id))
 		.orderBy(asc(materials.order), desc(materials.createdAt));
 
 	const totalMaterials = allMaterials.length;
@@ -36,11 +38,12 @@ export const load: PageServerLoad = async ({ platform }) => {
 };
 
 export const actions: Actions = {
-	createMaterial: async ({ request, platform }) => {
+	createMaterial: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const title = data.get('title')?.toString()?.trim();
 		const category = data.get('category')?.toString()?.trim() || 'General';
-		const color = data.get('color')?.toString()?.trim() || '#facc15';
+		const color = data.get('color')?.toString()?.trim() || '#e2b342';
 		const url = data.get('url')?.toString()?.trim() || null;
 		const notes = data.get('notes')?.toString()?.trim() || '';
 
@@ -51,6 +54,7 @@ export const actions: Actions = {
 		const db = getDb(platform);
 		await db.insert(materials).values({
 			id: nanoid(10),
+			userId: user.id,
 			title,
 			category,
 			color,
@@ -65,7 +69,8 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
-	updateStatus: async ({ request, platform }) => {
+	updateStatus: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		const status = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
@@ -81,18 +86,22 @@ export const actions: Actions = {
 				status,
 				updatedAt: new Date()
 			})
-			.where(eq(materials.id, id));
+			.where(and(eq(materials.id, id), eq(materials.userId, user.id)));
 
 		return { success: true };
 	},
 
-	deleteMaterial: async ({ request, platform }) => {
+	deleteMaterial: async ({ request, locals, platform }) => {
+		const user = locals.user!;
 		const data = await request.formData();
 		const id = data.get('id')?.toString();
 		if (!id) return fail(400, { error: 'Invalid ID' });
 
 		const db = getDb(platform);
-		await db.delete(materials).where(eq(materials.id, id));
+		await db
+			.delete(materials)
+			.where(and(eq(materials.id, id), eq(materials.userId, user.id)));
+
 		return { success: true };
 	}
 };
