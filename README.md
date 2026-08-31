@@ -1,74 +1,130 @@
-# ⚡ DevTrack (Neo-Brutalist Developer Learning Tracker)
+# ⚡ DEVTRACK
 
-A personal programming learning hub and knowledge tracker designed with a sharp **Neo-Brutalism aesthetic (Dark Mode support)**, built using **SvelteKit + TypeScript**, styled with **Tailwind CSS v4**, and backed by serverless **Cloudflare D1 (SQLite)**.
+> A high-performance personal developer learning hub & practice tracker designed with a bold **Neo-Brutalism aesthetic (Light & Dark Mode)**, built on **SvelteKit 5 + TypeScript**, styled with **Tailwind CSS v4**, and backed by serverless **Cloudflare D1 (SQLite)**.
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-1. **Access Code Authentication**: Fast single access code gate without needing third-party auth providers.
-2. **Learning Topics & Curriculum Tracker**: Organizes learning items, categories, external documentation links, and status progression (`To Do`, `In Progress`, `Done`).
-3. **Markdown Notes with Syntax Highlighting**: Full GitHub Flavored Markdown (GFM) notes editor with live split-preview and Prism syntax highlighting for TypeScript, Go, Rust, Python, Bash, SQL, etc.
-4. **Practice Projects Showcase**: Tracks hands-on practice projects with direct links to GitHub repositories and live demos.
-5. **Unified Kanban Board**: Drag-and-drop / quick-switch Kanban board unifying both Learning Topics and Practice Projects with instant optimistic UI updates and filters.
-6. **Neo-Brutalism Theme**: High-contrast borders, bold offset shadows, vibrant accents, and zero-FOUC dark mode toggle.
-7. **100% Free Hosting on Cloudflare**: Runs effortlessly on Cloudflare Pages + D1 SQLite free tier (5,000,000 reads/day, 100,000 writes/day, 10 GB storage).
+- **🔐 Single Access Code Gate**: Quick, lightweight passcode authentication without third-party OAuth overhead or database user management.
+- **📚 Direct Learning Topics & Materials**: Fast topic management with status badges (`To Do`, `In Progress`, `Done`), external documentation links, and custom category badges.
+- **📝 Split-Screen Markdown Notes Editor**: Built-in GitHub Flavored Markdown (GFM) workspace with live preview, keyboard shortcuts (`Cmd+S` / `Ctrl+S`), and Prism code syntax highlighting (TypeScript, Go, Rust, Python, Bash, SQL, and more).
+- **🛠 Practice Projects Showcase**: Track coding experiments, repositories, and live demo URLs.
+- **📋 Unified Neo-Brutal Kanban Board**: Effortless drag-and-drop & quick status switching uniting both Learning Materials and Practice Projects with instant optimistic updates and filters.
+- **🎨 Neo-Brutalism Design System**: High-contrast borders, solid offset shadows, tactile interaction states, and 100% flicker-free (zero FOUC) Dark Mode.
+- **☁️ 100% Free Cloudflare Hosting**: Designed to run at zero cost on Cloudflare Pages + Cloudflare D1 free tier (5M reads/day, 100k writes/day, 10GB storage).
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Runtime & Package Manager**: [Bun](https://bun.sh)
-- **Framework**: [SvelteKit](https://kit.svelte.dev) + `@sveltejs/adapter-cloudflare`
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) (Modern `@import` & `@theme` setup)
-- **Database & ORM**: [Cloudflare D1](https://developers.cloudflare.com/d1/) + [Drizzle ORM](https://orm.drizzle.team)
-- **Markdown & Code Highlighting**: `marked` + `prismjs`
-- **Icons**: `lucide-svelte`
+| Layer | Technology |
+|---|---|
+| **Runtime & Package Manager** | [Bun](https://bun.sh) |
+| **Frontend & Fullstack Framework** | [SvelteKit 5](https://kit.svelte.dev) + TypeScript |
+| **Deployment Adapter** | `@sveltejs/adapter-cloudflare` |
+| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) (`@import "tailwindcss"` & `@theme`) |
+| **Database & ORM** | [Cloudflare D1](https://developers.cloudflare.com/d1/) (SQLite) + [Drizzle ORM](https://orm.drizzle.team) |
+| **Markdown & Syntax Highlighting** | `marked` + `prismjs` |
+| **Icons** | `lucide-svelte` |
 
 ---
 
-## 💻 Local Development
+## 🚀 Getting Started (Local Development)
 
-### 1. Install Dependencies
+### 1. Prerequisites
+Ensure you have [Bun](https://bun.sh) installed:
 ```bash
+curl -fsSL https://bun.sh/install | bash
+```
+
+### 2. Clone and Install Dependencies
+```bash
+git clone <your-repo-url> devtrack
+cd devtrack
 bun install
 ```
 
-### 2. Run Local Dev Server
+### 3. Run the Development Server
 ```bash
 bun run dev
 ```
-Open `http://localhost:5173`.
+Open your browser at `http://localhost:5173`.
 
-Default local access code: `belajarcoding` (Configurable via `ACCESS_CODE` environment variable).
+> **Default Access Code:** `belajarcoding` (Configurable via `ACCESS_CODE` environment variable or secret).
 
 ---
 
-## ☁️ Cloudflare Free Deployment (Step-by-step)
+## ☁️ Deployment to Cloudflare Pages (100% Free)
 
-### 1. Create Cloudflare D1 Database
+### Step 1: Create a Cloudflare D1 Database
+Log in with Wrangler CLI and create your remote D1 instance:
 ```bash
+bunx wrangler login
 bunx wrangler d1 create learn-tracker-db
 ```
-Copy the generated `database_id` into `wrangler.toml`:
+
+### Step 2: Configure `wrangler.toml`
+Paste the returned `database_id` into your `wrangler.toml`:
 ```toml
+name = "learn-tracker"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
 [[d1_databases]]
 binding = "DB"
 database_name = "learn-tracker-db"
-database_id = "<YOUR_DATABASE_ID>"
+database_id = "<YOUR_DATABASE_ID_HERE>"
 ```
 
-### 2. Apply Migrations to Remote D1
+### Step 3: Run Database Migrations on Remote D1
 ```bash
-bunx wrangler d1 migrations apply learn-tracker-db --remote
+bunx wrangler d1 execute learn-tracker-db --remote --file=drizzle/0000_schema.sql
 ```
 
-### 3. Deploy to Cloudflare Pages
+### Step 4: Build & Deploy
 ```bash
 bun run build
-bunx wrangler pages deploy .svelte-kit/cloudflare --project-name learn-tracker
+bunx wrangler pages deploy .svelte-kit/cloudflare --project-name devtrack
 ```
 
-### 4. Set Environment Secret (Access Code)
-In the Cloudflare Dashboard under **Pages > learn-tracker > Settings > Environment Variables**:
-- `ACCESS_CODE`: *Your custom secret password*
+### Step 5: Set Your Secret Access Code
+In your **Cloudflare Dashboard**:
+1. Go to **Workers & Pages** > **devtrack** > **Settings** > **Environment Variables**.
+2. Add a variable/secret:
+   - Variable Name: `ACCESS_CODE`
+   - Value: `your-secret-passcode`
+
+---
+
+## 📁 Project Structure
+
+```
+├── drizzle/                     # SQL migration files
+├── src/
+│   ├── app.css                  # Tailwind v4 & Neo-Brutalist design tokens
+│   ├── app.html                 # HTML shell with anti-FOUC theme blocker
+│   ├── hooks.server.ts          # Auth guard & SSR dark mode theme injector
+│   ├── lib/
+│   │   ├── components/          # Reusable Neo-Brutalist components (ConfirmModal, CustomSelect)
+│   │   ├── server/db/           # Drizzle ORM schema & Cloudflare D1 client
+│   │   ├── stores/              # Svelte stores (Dark/Light theme store)
+│   │   └── utils/               # Markdown & Prism syntax highlighter
+│   └── routes/
+│       ├── +layout.svelte       # App shell & Neo-Brutalist navigation header
+│       ├── login/               # Access code login gate
+│       ├── materials/           # Learning topics & notes directory
+│       │   └── [id]/            # Split-screen Markdown notes editor
+│       ├── projects/            # Practice projects showcase
+│       └── kanban/              # Unified drag-and-drop Kanban board
+├── static/                      # Static assets (Favicon, etc.)
+├── wrangler.toml                # Cloudflare Pages & D1 binding configuration
+└── package.json
+```
+
+---
+
+## 📜 License
+
+MIT License. Free to use, modify, and deploy for your personal learning workflow!
