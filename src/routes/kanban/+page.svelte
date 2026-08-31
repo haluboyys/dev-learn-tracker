@@ -9,31 +9,40 @@
 		GitBranch,
 		ArrowRight,
 		ArrowLeft,
-		Filter
+		Filter,
+		Search
 	} from 'lucide-svelte';
 
 	let { data } = $props();
 
-	// Local reactive copy for optimistic updates
+	// Optimistic copy
 	let items = $state([...data.items]);
 	$effect(() => {
 		items = [...data.items];
 	});
 
-	// Filter States
+	// Filters
 	let filterType = $state<'all' | 'material' | 'project'>('all');
-	let filterTopic = $state<string>('all');
+	let filterCategory = $state<string>('all');
+	let searchQuery = $state<string>('');
 
-	const columns: { id: 'todo' | 'in_progress' | 'done'; title: string; color: string; badgeBg: string }[] = [
-		{ id: 'todo', title: 'TO DO', color: 'bg-yellow-400', badgeBg: 'bg-yellow-100 dark:bg-yellow-950/50' },
-		{ id: 'in_progress', title: 'IN PROGRESS', color: 'bg-cyan-400', badgeBg: 'bg-cyan-100 dark:bg-cyan-950/50' },
-		{ id: 'done', title: 'DONE', color: 'bg-green-400', badgeBg: 'bg-green-100 dark:bg-green-950/50' }
+	const columns: { id: 'todo' | 'in_progress' | 'done'; title: string; headerBg: string; textCol: string }[] = [
+		{ id: 'todo', title: 'TO DO', headerBg: 'bg-amber-400', textCol: 'text-black' },
+		{ id: 'in_progress', title: 'IN PROGRESS', headerBg: 'bg-cyan-400', textCol: 'text-black' },
+		{ id: 'done', title: 'DONE', headerBg: 'bg-emerald-400', textCol: 'text-black' }
 	];
 
 	const filteredItems = $derived(
 		items.filter((item) => {
 			if (filterType !== 'all' && item.type !== filterType) return false;
-			if (filterTopic !== 'all' && item.topicId !== filterTopic) return false;
+			if (filterCategory !== 'all' && item.category !== filterCategory) return false;
+			if (searchQuery) {
+				const q = searchQuery.toLowerCase();
+				const titleMatch = item.title.toLowerCase().includes(q);
+				const contentStr = item.type === 'material' ? (item.notes || '') : (item.description || '');
+				const noteMatch = contentStr.toLowerCase().includes(q);
+				if (!titleMatch && !noteMatch) return false;
+			}
 			return true;
 		})
 	);
@@ -42,12 +51,10 @@
 		return filteredItems.filter((i) => i.status === colId);
 	}
 
-	// Optimistic move
 	async function moveStatus(id: string, type: 'material' | 'project', newStatus: 'todo' | 'in_progress' | 'done') {
-		// Update optimistic locally
+		// Local optimistic update
 		items = items.map((i) => (i.id === id ? { ...i, status: newStatus } : i));
 
-		// Submit form
 		const formData = new FormData();
 		formData.append('id', id);
 		formData.append('type', type);
@@ -59,7 +66,7 @@
 		});
 	}
 
-	// Drag & Drop
+	// Drag & drop
 	let draggedItemId = $state<string | null>(null);
 
 	function onDragStart(id: string) {
@@ -85,10 +92,10 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<!-- Header & Filters -->
+	<!-- Page Header & Filters Toolbar -->
 	<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
 		<div>
-			<div class="inline-flex items-center gap-1.5 bg-purple-400 text-black px-2.5 py-0.5 border-2 border-black font-black text-xs uppercase tracking-wider mb-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+			<div class="neo-badge bg-purple-400 text-black mb-2">
 				<Kanban class="w-3.5 h-3.5" />
 				Unified Workspace Board
 			</div>
@@ -97,33 +104,39 @@
 			</h1>
 		</div>
 
-		<!-- Filters Bar -->
+		<!-- Filter Toolbar -->
 		<div class="flex flex-wrap items-center gap-3">
-			<div class="flex items-center gap-1 bg-white dark:bg-slate-800 p-1 border-2 border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-				<Filter class="w-4 h-4 ml-1 text-slate-500" />
-				<!-- Type Filter -->
-				<select
-					bind:value={filterType}
-					class="text-xs font-black uppercase bg-transparent text-black dark:text-white outline-none px-2 py-1 cursor-pointer"
-				>
-					<option value="all">Semua Tipe</option>
-					<option value="material">Hanya Materi</option>
-					<option value="project">Hanya Project</option>
-				</select>
+			<!-- Search -->
+			<div class="relative">
+				<input
+					type="text"
+					placeholder="Filter kartu..."
+					bind:value={searchQuery}
+					class="pl-8 pr-3 py-2 neo-input text-xs font-bold w-36 sm:w-44"
+				/>
+				<Search class="w-3.5 h-3.5 absolute left-2.5 top-3 text-slate-500 pointer-events-none" />
 			</div>
 
-			<div class="flex items-center gap-1 bg-white dark:bg-slate-800 p-1 border-2 border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-				<!-- Topic Filter -->
-				<select
-					bind:value={filterTopic}
-					class="text-xs font-black uppercase bg-transparent text-black dark:text-white outline-none px-2 py-1 cursor-pointer"
-				>
-					<option value="all">Semua Topik</option>
-					{#each data.topics as top}
-						<option value={top.id}>{top.title}</option>
-					{/each}
-				</select>
-			</div>
+			<!-- Type Filter -->
+			<select
+				bind:value={filterType}
+				class="neo-input px-3 py-2 text-xs font-black uppercase cursor-pointer"
+			>
+				<option value="all">Semua Tipe</option>
+				<option value="material">Hanya Materi</option>
+				<option value="project">Hanya Project</option>
+			</select>
+
+			<!-- Category Filter -->
+			<select
+				bind:value={filterCategory}
+				class="neo-input px-3 py-2 text-xs font-black uppercase cursor-pointer"
+			>
+				<option value="all">Semua Kategori</option>
+				{#each data.categories as cat}
+					<option value={cat}>{cat}</option>
+				{/each}
+			</select>
 		</div>
 	</div>
 
@@ -132,80 +145,86 @@
 		{#each columns as col}
 			{@const colItems = getColumnItems(col.id)}
 			<div
-				class="neo-box bg-white dark:bg-slate-800 flex flex-col min-h-[600px] overflow-hidden"
+				class="neo-card bg-white dark:bg-slate-900 flex flex-col min-h-[600px] overflow-hidden"
+				role="region"
+				aria-label="{col.title} Column"
 				ondragover={onDragOver}
 				ondrop={() => onDrop(col.id)}
 			>
 				<!-- Column Header -->
-				<div class="p-3 border-b-3 border-black dark:border-slate-700 {col.color} text-black flex items-center justify-between">
-					<div class="flex items-center gap-2">
-						<h2 class="font-black text-base uppercase tracking-wider">{col.title}</h2>
-					</div>
-					<span class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center font-mono text-xs font-bold shadow-[1px_1px_0px_0px_rgba(255,255,255,1)]">
+				<div class="p-3.5 border-b-3 border-black dark:border-white {col.headerBg} {col.textCol} flex items-center justify-between">
+					<h2 class="font-black text-sm uppercase tracking-wider">{col.title}</h2>
+					<span class="w-6 h-6 bg-black text-white font-mono text-xs font-black flex items-center justify-center border border-black shadow-[1.5px_1.5px_0px_0px_rgba(255,255,255,1)]">
 						{colItems.length}
 					</span>
 				</div>
 
-				<!-- Column Body / Card Container -->
-				<div class="p-3 flex-1 space-y-3 bg-slate-50/50 dark:bg-slate-900/40">
+				<!-- Cards Column -->
+				<div class="p-3.5 flex-1 space-y-3.5 bg-slate-50/70 dark:bg-slate-950/50">
 					{#if colItems.length === 0}
-						<div class="h-32 border-2 border-dashed border-black/20 dark:border-white/20 rounded flex items-center justify-center text-xs font-mono font-bold text-slate-400">
-							Tarik kartu ke sini
+						<div class="h-36 border-3 border-dashed border-black/20 dark:border-white/20 flex flex-col items-center justify-center p-4 text-center">
+							<span class="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+								Tarik & letakkan kartu ke sini
+							</span>
 						</div>
 					{/if}
 
 					{#each colItems as item (item.id)}
 						<div
 							draggable="true"
+							role="article"
 							ondragstart={() => onDragStart(item.id)}
-							class="neo-box p-3 bg-white dark:bg-slate-800 cursor-grab active:cursor-grabbing hover:-translate-y-0.5 transition-transform group"
+							class="neo-card-sm p-3.5 bg-white dark:bg-slate-900 cursor-grab active:cursor-grabbing hover:-translate-y-0.5 transition-transform"
 						>
-							<!-- Top Card Badges -->
+							<!-- Top Badges -->
 							<div class="flex items-center justify-between gap-1 mb-2">
 								<div class="flex items-center gap-1.5">
 									{#if item.type === 'material'}
-										<span class="neo-badge bg-yellow-300 text-black text-[10px]">
-											<BookOpen class="w-3 h-3 mr-1" />
+										<span class="neo-badge bg-amber-400 text-black text-[10px] py-0.5 px-1.5">
+											<BookOpen class="w-3 h-3 stroke-[2.5]" />
 											Materi
 										</span>
 									{:else}
-										<span class="neo-badge bg-cyan-300 text-black text-[10px]">
-											<FolderGit2 class="w-3 h-3 mr-1" />
+										<span class="neo-badge bg-cyan-400 text-black text-[10px] py-0.5 px-1.5">
+											<FolderGit2 class="w-3 h-3 stroke-[2.5]" />
 											Project
 										</span>
 									{/if}
 								</div>
 
-								{#if item.topic}
-									<span
-										class="neo-badge text-black text-[10px] truncate max-w-[120px]"
-										style="background-color: {item.topic.color};"
-									>
-										{item.topic.title}
-									</span>
-								{/if}
+								<span
+									class="neo-badge text-black text-[10px] py-0.5 px-1.5 truncate max-w-[120px]"
+									style="background-color: {item.color || '#facc15'};"
+								>
+									{item.category}
+								</span>
 							</div>
 
-							<!-- Card Title -->
-							<h3 class="font-black text-sm uppercase text-black dark:text-white leading-tight mb-2">
+							<!-- Title -->
+							<h3 class="font-black text-sm uppercase text-black dark:text-white leading-snug mb-2">
 								{item.title}
 							</h3>
 
+							<!-- Description / Notes preview -->
 							{#if item.type === 'project' && item.description}
-								<p class="text-[11px] text-slate-600 dark:text-slate-300 line-clamp-2 mb-3">
+								<p class="text-[11px] text-slate-700 dark:text-slate-300 line-clamp-2 mb-3 leading-relaxed">
 									{item.description}
+								</p>
+							{:else if item.type === 'material' && item.notes}
+								<p class="text-[11px] font-mono text-slate-600 dark:text-slate-400 line-clamp-2 mb-3 leading-relaxed">
+									{item.notes}
 								</p>
 							{/if}
 
-							<!-- Card Footer / Actions -->
-							<div class="pt-2 border-t border-black/10 dark:border-slate-700 flex items-center justify-between">
+							<!-- Card Actions Footer -->
+							<div class="pt-2.5 border-t-2 border-dashed border-black/15 dark:border-white/15 flex items-center justify-between">
 								<div class="flex items-center gap-2">
 									{#if item.type === 'material'}
 										<a
 											href="/materials/{item.id}"
-											class="text-[11px] font-bold text-black dark:text-white hover:text-yellow-500 flex items-center gap-1 underline underline-offset-2"
+											class="text-xs font-black text-black dark:text-white hover:text-amber-500 flex items-center gap-1 underline underline-offset-2"
 										>
-											<FileText class="w-3 h-3" />
+											<FileText class="w-3.5 h-3.5 stroke-[2.5]" />
 											Notes
 										</a>
 										{#if item.url}
@@ -213,7 +232,7 @@
 												href={item.url}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5"
+												class="text-xs font-mono text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-0.5"
 											>
 												<ExternalLink class="w-3 h-3" />
 											</a>
@@ -224,9 +243,9 @@
 												href={item.repoUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-bold text-black dark:text-white hover:underline flex items-center gap-1"
+												class="text-xs font-black text-black dark:text-white hover:underline flex items-center gap-1"
 											>
-												<GitBranch class="w-3 h-3" />
+												<GitBranch class="w-3.5 h-3.5 stroke-[2.5]" />
 												Repo
 											</a>
 										{/if}
@@ -235,34 +254,34 @@
 												href={item.liveUrl}
 												target="_blank"
 												rel="noopener noreferrer"
-												class="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
+												class="text-xs font-black text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1"
 											>
-												<ExternalLink class="w-3 h-3" />
+												<ExternalLink class="w-3.5 h-3.5 stroke-[2.5]" />
 												Demo
 											</a>
 										{/if}
 									{/if}
 								</div>
 
-								<!-- Quick Move Buttons -->
+								<!-- Quick Status Arrow Buttons -->
 								<div class="flex items-center gap-1">
 									{#if col.id !== 'todo'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'done' ? 'in_progress' : 'todo')}
-											title="Mundur ke status sebelumnya"
-											class="p-1 bg-slate-100 dark:bg-slate-700 hover:bg-yellow-200 text-black dark:text-white border border-black text-[10px] cursor-pointer"
+											title="Pindah ke kolom sebelumnya"
+											class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white cursor-pointer"
 										>
-											<ArrowLeft class="w-3 h-3" />
+											<ArrowLeft class="w-3 h-3 stroke-[3]" />
 										</button>
 									{/if}
 
 									{#if col.id !== 'done'}
 										<button
 											onclick={() => moveStatus(item.id, item.type, col.id === 'todo' ? 'in_progress' : 'done')}
-											title="Maju ke status berikutnya"
-											class="p-1 bg-slate-100 dark:bg-slate-700 hover:bg-green-200 text-black dark:text-white border border-black text-[10px] cursor-pointer"
+											title="Pindah ke kolom berikutnya"
+											class="neo-btn-icon neo-btn-neutral p-1 text-black dark:text-white cursor-pointer"
 										>
-											<ArrowRight class="w-3 h-3" />
+											<ArrowRight class="w-3 h-3 stroke-[3]" />
 										</button>
 									{/if}
 								</div>

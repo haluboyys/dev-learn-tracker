@@ -1,6 +1,6 @@
 import { getDb } from '$lib/server/db';
-import { projects, topics } from '$lib/server/db/schema';
-import { asc, desc, eq } from 'drizzle-orm';
+import { projects } from '$lib/server/db/schema';
+import { desc, eq } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import type { Actions, PageServerLoad } from './$types';
@@ -9,16 +9,6 @@ export const load: PageServerLoad = async ({ platform }) => {
 	const db = getDb(platform);
 
 	const allProjects = await db.select().from(projects).orderBy(desc(projects.createdAt));
-	const allTopics = await db.select().from(topics).orderBy(asc(topics.order));
-
-	// Enhance projects with topic details
-	const enhancedProjects = allProjects.map((proj: any) => {
-		const topic = allTopics.find((t: any) => t.id === proj.topicId);
-		return {
-			...proj,
-			topic
-		};
-	});
 
 	const stats = {
 		total: allProjects.length,
@@ -27,9 +17,11 @@ export const load: PageServerLoad = async ({ platform }) => {
 		todo: allProjects.filter((p: any) => p.status === 'todo').length
 	};
 
+	const categories = Array.from(new Set(allProjects.map((p: any) => p.category || 'Project')));
+
 	return {
-		projects: enhancedProjects,
-		topics: allTopics,
+		projects: allProjects,
+		categories,
 		stats
 	};
 };
@@ -39,9 +31,10 @@ export const actions: Actions = {
 		const data = await request.formData();
 		const title = data.get('title')?.toString()?.trim();
 		const description = data.get('description')?.toString()?.trim() || '';
+		const category = data.get('category')?.toString()?.trim() || 'Project';
+		const color = data.get('color')?.toString()?.trim() || '#22d3ee';
 		const repoUrl = data.get('repoUrl')?.toString()?.trim() || null;
 		const liveUrl = data.get('liveUrl')?.toString()?.trim() || null;
-		const topicId = data.get('topicId')?.toString() || null;
 		const status = (data.get('status')?.toString() as 'todo' | 'in_progress' | 'done') || 'todo';
 
 		if (!title) {
@@ -53,9 +46,10 @@ export const actions: Actions = {
 			id: nanoid(10),
 			title,
 			description,
+			category,
+			color,
 			repoUrl,
 			liveUrl,
-			topicId: topicId === 'none' ? null : topicId,
 			status,
 			createdAt: new Date(),
 			updatedAt: new Date()

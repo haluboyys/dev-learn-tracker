@@ -1,43 +1,49 @@
 import { getDb } from '$lib/server/db';
-import { materials, projects, topics } from '$lib/server/db/schema';
-import { asc, eq } from 'drizzle-orm';
+import { materials, projects } from '$lib/server/db/schema';
+import { desc, asc, eq } from 'drizzle-orm';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ platform }) => {
 	const db = getDb(platform);
 
-	const allTopics = await db.select().from(topics).orderBy(asc(topics.order));
-	const allMaterials = await db.select().from(materials).orderBy(asc(materials.order));
-	const allProjects = await db.select().from(projects).orderBy(asc(projects.createdAt));
+	const allMaterials = await db
+		.select()
+		.from(materials)
+		.orderBy(asc(materials.order), desc(materials.createdAt));
+
+	const allProjects = await db.select().from(projects).orderBy(desc(projects.createdAt));
 
 	// Enrich items
 	const unifiedMaterials = allMaterials.map((m: any) => ({
 		id: m.id,
 		type: 'material' as const,
 		title: m.title,
+		category: m.category || 'Materi',
+		color: m.color || '#facc15',
 		status: m.status as 'todo' | 'in_progress' | 'done',
 		url: m.url,
-		notes: m.notes,
-		topicId: m.topicId,
-		topic: allTopics.find((t: any) => t.id === m.topicId)
+		notes: m.notes
 	}));
 
 	const unifiedProjects = allProjects.map((p: any) => ({
 		id: p.id,
 		type: 'project' as const,
 		title: p.title,
+		category: p.category || 'Project',
+		color: p.color || '#22d3ee',
 		status: p.status as 'todo' | 'in_progress' | 'done',
 		description: p.description,
 		repoUrl: p.repoUrl,
-		liveUrl: p.liveUrl,
-		topicId: p.topicId,
-		topic: allTopics.find((t: any) => t.id === p.topicId)
+		liveUrl: p.liveUrl
 	}));
 
+	const allItems = [...unifiedMaterials, ...unifiedProjects];
+	const categories = Array.from(new Set(allItems.map((i) => i.category)));
+
 	return {
-		topics: allTopics,
-		items: [...unifiedMaterials, ...unifiedProjects]
+		items: allItems,
+		categories
 	};
 };
 

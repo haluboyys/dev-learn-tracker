@@ -1,5 +1,5 @@
 import { getDb } from '$lib/server/db';
-import { materials, topics } from '$lib/server/db/schema';
+import { materials } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -12,13 +12,8 @@ export const load: PageServerLoad = async ({ params, platform }) => {
 		throw error(404, 'Materi tidak ditemukan');
 	}
 
-	const material = materialList[0];
-	const topicList = await db.select().from(topics).where(eq(topics.id, material.topicId)).limit(1);
-	const topic = topicList.length > 0 ? topicList[0] : null;
-
 	return {
-		material,
-		topic
+		material: materialList[0]
 	};
 };
 
@@ -27,6 +22,7 @@ export const actions: Actions = {
 		const data = await request.formData();
 		const notes = data.get('notes')?.toString() ?? '';
 		const title = data.get('title')?.toString()?.trim();
+		const category = data.get('category')?.toString()?.trim();
 		const status = data.get('status')?.toString() as 'todo' | 'in_progress' | 'done';
 
 		const db = getDb(platform);
@@ -35,6 +31,7 @@ export const actions: Actions = {
 			.set({
 				notes,
 				...(title ? { title } : {}),
+				...(category ? { category } : {}),
 				...(status ? { status } : {}),
 				updatedAt: new Date()
 			})
