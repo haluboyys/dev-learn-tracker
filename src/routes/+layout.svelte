@@ -46,7 +46,7 @@
 
 				<!-- Controls -->
 				<div class="flex items-center gap-3">
-					<form method="POST" action="/login?/logout">
+					<form method="POST" action="/logout">
 						<button
 							type="submit"
 							class="neo-btn-sm neo-btn-danger"
