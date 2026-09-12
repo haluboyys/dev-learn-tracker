@@ -69,6 +69,37 @@ export const actions: Actions = {
 		return { success: true };
 	},
 
+	updateMaterial: async ({ request, locals, platform }) => {
+		const user = locals.user!;
+		const data = await request.formData();
+		const id = data.get('id')?.toString();
+		const title = data.get('title')?.toString()?.trim();
+		const category = data.get('category')?.toString()?.trim() || 'General';
+		const color = data.get('color')?.toString()?.trim() || '#e2b342';
+		const url = data.get('url')?.toString()?.trim() || null;
+
+		if (!id) {
+			return fail(400, { error: 'Topic ID is required' });
+		}
+		if (!title) {
+			return fail(400, { error: 'Topic title is required' });
+		}
+
+		const db = getDb(platform);
+		await db
+			.update(materials)
+			.set({
+				title,
+				category,
+				color,
+				url,
+				updatedAt: new Date()
+			})
+			.where(and(eq(materials.id, id), eq(materials.userId, user.id)));
+
+		return { success: true };
+	},
+
 	updateStatus: async ({ request, locals, platform }) => {
 		const user = locals.user!;
 		const data = await request.formData();

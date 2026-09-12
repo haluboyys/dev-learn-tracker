@@ -14,7 +14,8 @@
 		BookOpen,
 		Search,
 		X,
-		ArrowRight
+		ArrowRight,
+		Pencil
 	} from 'lucide-svelte';
 
 	let { data } = $props();
@@ -26,6 +27,23 @@
 	let newColor = $state('#e2b342');
 	let newUrl = $state('');
 	let newNotes = $state('');
+
+	// Edit Modal State
+	let showEditModal = $state(false);
+	let editId = $state('');
+	let editTitle = $state('');
+	let editCategory = $state('Backend');
+	let editColor = $state('#e2b342');
+	let editUrl = $state('');
+
+	function openEditModal(item: any) {
+		editId = item.id;
+		editTitle = item.title;
+		editCategory = item.category || 'General';
+		editColor = item.color || '#e2b342';
+		editUrl = item.url || '';
+		showEditModal = true;
+	}
 
 	// Delete Confirmation Modal State
 	let showDeleteConfirm = $state(false);
@@ -281,7 +299,7 @@
 					</div>
 
 					<!-- Bottom Action Buttons -->
-					<div class="pt-3 border-t-2 border-dashed border-[#384259] flex items-center justify-between gap-3">
+					<div class="pt-3 border-t-2 border-dashed border-[#384259] flex items-center justify-between gap-2">
 						<a
 							href="/materials/{item.id}"
 							class="flex-1 neo-btn-sm neo-btn-primary flex items-center justify-center gap-1.5 py-2"
@@ -293,8 +311,19 @@
 
 						<button
 							type="button"
+							onclick={() => openEditModal(item)}
+							aria-label="Edit Topic"
+							title="Edit Topic"
+							class="neo-btn-icon neo-btn-secondary"
+						>
+							<Pencil class="w-4 h-4 text-[#12151e] stroke-[2.5]" />
+						</button>
+
+						<button
+							type="button"
 							onclick={() => promptDelete({ id: item.id, title: item.title })}
 							aria-label="Delete Topic"
+							title="Delete Topic"
 							class="neo-btn-icon neo-btn-danger"
 						>
 							<Trash2 class="w-4 h-4 text-[#12151e] stroke-[2.5]" />
@@ -417,6 +446,123 @@
 						class="neo-btn neo-btn-primary text-xs font-black"
 					>
 						Save Topic
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{/if}
+
+<!-- Modal Edit Material -->
+{#if showEditModal}
+	<div class="fixed inset-0 z-50 bg-[#080a0f]/80 backdrop-blur-xs flex items-center justify-center p-4">
+		<div class="w-full max-w-lg neo-card p-6 bg-[#1a1f2c] border-3 border-[#384259] animate-in zoom-in-95 duration-150">
+			<div class="flex items-center justify-between pb-3 border-b-2 border-[#384259] mb-5">
+				<h3 class="font-black text-xl uppercase text-[#f1f5f9] flex items-center gap-2">
+					<Pencil class="w-5 h-5 text-[#64b5d6]" />
+					Edit Topic
+				</h3>
+				<button
+					onclick={() => (showEditModal = false)}
+					class="neo-btn-icon neo-btn-neutral p-1.5"
+				>
+					<X class="w-4 h-4" />
+				</button>
+			</div>
+
+			<form
+				method="POST"
+				action="?/updateMaterial"
+				use:enhance={() => {
+					return async ({ update }) => {
+						showEditModal = false;
+						await update();
+					};
+				}}
+				class="space-y-4"
+			>
+				<input type="hidden" name="id" value={editId} />
+
+				<div>
+					<label for="edit-mat-title" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+						Topic Title
+					</label>
+					<input
+						type="text"
+						id="edit-mat-title"
+						name="title"
+						required
+						bind:value={editTitle}
+						placeholder="e.g., Golang Basics, SvelteKit 5, Docker Swarm"
+						class="w-full px-3.5 py-2.5 neo-input"
+					/>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+					<div>
+						<label for="edit-mat-category" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+							Category
+						</label>
+						<input
+							type="text"
+							id="edit-mat-category"
+							name="category"
+							bind:value={editCategory}
+							list="edit-categories-list"
+							placeholder="e.g., Backend"
+							class="w-full px-3.5 py-2.5 neo-input text-xs"
+						/>
+						<datalist id="edit-categories-list">
+							{#each defaultCategories as cat}
+								<option value={cat}></option>
+							{/each}
+						</datalist>
+					</div>
+
+					<div>
+						<span class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+							Badge Color
+						</span>
+						<div class="flex gap-1.5 pt-1">
+							{#each colorOptions as c}
+								<label class="cursor-pointer">
+									<input type="radio" name="color" value={c.value} bind:group={editColor} class="sr-only" />
+									<div
+										class="w-7 h-7 border-2 border-[#384259] shadow-[1.5px_1.5px_0px_0px_#080a0f] {c.bg} {editColor === c.value ? 'ring-2 ring-[#f1f5f9] scale-110' : 'opacity-60'}"
+									></div>
+								</label>
+							{/each}
+						</div>
+					</div>
+				</div>
+
+				<div>
+					<label for="edit-mat-url" class="block font-black text-xs uppercase tracking-wider text-[#f1f5f9] mb-1.5">
+						Documentation / Resource URL (Optional)
+					</label>
+					<input
+						type="url"
+						id="edit-mat-url"
+						name="url"
+						bind:value={editUrl}
+						placeholder="https://go.dev/doc/tutorial/getting-started"
+						class="w-full px-3.5 py-2.5 neo-input text-xs font-mono"
+					/>
+				</div>
+
+				<div class="flex justify-end gap-3 pt-3 border-t-2 border-dashed border-[#384259]">
+					<button
+						type="button"
+						onclick={() => (showEditModal = false)}
+						class="neo-btn neo-btn-neutral text-xs"
+					>
+						Cancel
+					</button>
+					<button
+						type="submit"
+						class="neo-btn neo-btn-primary text-xs font-black"
+					>
+						Update Topic
 					</button>
 				</div>
 			</form>

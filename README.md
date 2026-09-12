@@ -1,43 +1,53 @@
 # DEVTRACK
 
-A personal developer learning hub and practice tracker built with SvelteKit 5, TypeScript, Tailwind CSS v4, and Cloudflare D1 (SQLite).
+<div align="center">
 
-Designed with a high-contrast Dark Pastel Neo-Brutalism interface and multi-user authentication support.
+[![Release](https://img.shields.io/badge/release-v0.1.0-e2b342?style=for-the-badge&logo=github&logoColor=12151e)](https://github.com/andrraa/learn-dev-tracker/releases/tag/v0.1.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-7cb98f?style=for-the-badge)](LICENSE)
+[![SvelteKit 5](https://img.shields.io/badge/SvelteKit_5-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)](https://svelte.dev)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Cloudflare Pages & D1](https://img.shields.io/badge/Cloudflare_Pages_%26_D1-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://pages.cloudflare.com)
+[![Bun](https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white)](https://bun.sh)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+
+**A lightweight, personal developer learning hub and practice tracker built with SvelteKit 5, TypeScript, Tailwind CSS v4, and Cloudflare D1 (SQLite).**
+
+[Live Demo](https://learn-dev-tracker.pages.dev)
+
+</div>
 
 ---
 
 ## Overview
 
-DEVTRACK is a lightweight, zero-maintenance web application for organizing personal coding studies, tracking reference notes, managing practice projects, and prioritizing learning workflows using an integrated Kanban board.
+DEVTRACK is a zero-maintenance web application designed for developers to organize personal coding curriculums, keep structured markdown notes, manage practice projects, and streamline study workflows using an integrated Kanban board.
 
-Each user registers and signs in to access their own isolated workspace of learning topics, notes, and practice projects.
-
-The application is architected to run entirely on Cloudflare's free tier (Pages + D1 Database) with zero ongoing hosting costs.
+Each developer registers and signs in to access an isolated personal workspace with complete data privacy. The entire application runs seamlessly on Cloudflare's serverless free tier (Pages + D1 Database) with zero ongoing hosting fees.
 
 ---
 
 ## Key Features
 
-- **Multi-User Authentication**: Register & Sign In system with Web Crypto PBKDF2 password hashing and HMAC-SHA256 signed session cookies.
-- **User Data Isolation**: Learning topics, markdown notes, and practice projects are securely scoped per user.
-- **Topic & Material Management**: Direct topic tracking with status workflows (`To Do`, `In Progress`, `Done`), external documentation links, and categorized tags.
-- **Markdown Notes Workspace**: Split-screen editor with live preview, keyboard shortcuts (`Cmd+S` / `Ctrl+S`), and Prism.js syntax highlighting across multiple programming languages.
-- **Practice Projects Tracker**: Portfolio and experiment log with links to source repositories and live deployments.
-- **Unified Kanban Board**: Drag-and-drop workflow consolidating both study topics and practice projects into three status columns with instant optimistic UI updates.
-- **Neo-Brutalism UI**: Dark Pastel aesthetic with soft slate surfaces, muted pastel accents (amber, sky, sage, rose, lavender), crisp borders, and solid hard offset shadows.
+- **Multi-User Authentication**: Secure registration and sign-in powered by Web Crypto PBKDF2 password hashing and HMAC-SHA256 signed session cookies.
+- **Strict Data Isolation**: Learning topics, notes, and practice projects are securely partitioned per user.
+- **Topic & Curriculum Management**: Create, edit, and organize topics with custom categories, custom badge colors, documentation URLs, and three-state workflows (`To Do`, `In Progress`, `Done`).
+- **Markdown Notes Workspace**: Dual-pane editor with live markdown preview, formatting toolbar, syntax highlighting via Prism.js, and quick-save shortcuts (`Cmd+S` / `Ctrl+S`).
+- **Practice Projects Tracker**: Log hands-on experiments, side projects, repository links, and live deployment URLs.
+- **Unified Kanban Board**: Drag-and-drop board consolidating study topics and practice projects into three status columns with instant optimistic UI updates.
+- **Dark Pastel Neo-Brutalist UI**: High-contrast, tactile aesthetic featuring dark slate backgrounds, soft pastel accents, bold borders, and sharp offset drop shadows.
 
 ---
 
 ## Tech Stack
 
-- **Runtime & Package Manager**: Bun
-- **Framework**: SvelteKit 5 (TypeScript)
-- **Deployment Adapter**: `@sveltejs/adapter-cloudflare`
-- **Styling**: Tailwind CSS v4
-- **Database & ORM**: Cloudflare D1 (SQLite) + Drizzle ORM
-- **Authentication**: Web Crypto API (PBKDF2 + HMAC-SHA256)
-- **Markdown & Highlighting**: Marked + PrismJS
-- **Icons**: Lucide Svelte
+- **Runtime & Package Manager**: [Bun](https://bun.sh)
+- **Frontend / Meta-Framework**: [SvelteKit 5](https://svelte.dev) (Runes & TypeScript)
+- **Deployment Target**: [Cloudflare Pages](https://pages.cloudflare.com) via `@sveltejs/adapter-cloudflare`
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com)
+- **Database & ORM**: [Cloudflare D1](https://developers.cloudflare.com/d1/) (Serverless SQLite) + [Drizzle ORM](https://orm.drizzle.team)
+- **Authentication**: Web Crypto API (`PBKDF2` key derivation & `HMAC-SHA256` cookie signing)
+- **Markdown & Code Highlighting**: [Marked](https://marked.js.org) + [PrismJS](https://prismjs.com)
+- **Icons**: [Lucide Svelte](https://lucide.dev)
 
 ---
 
@@ -45,9 +55,9 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
 
 ### Prerequisites
 
-- [Bun](https://bun.sh) (v1.1+ recommended)
+- [Bun](https://bun.sh) (v1.1+ recommended) or Node.js (v20+)
 
-### Installation
+### Getting Started
 
 1. Clone the repository:
    ```bash
@@ -60,12 +70,12 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
    bun install
    ```
 
-3. Start the development server:
+3. Start the local development server:
    ```bash
    bun run dev
    ```
 
-4. Open `http://localhost:5173` in your browser to register and create your account.
+4. Navigate to `http://localhost:5173` in your browser to register and create your account.
 
 ---
 
@@ -73,7 +83,7 @@ The application is architected to run entirely on Cloudflare's free tier (Pages 
 
 ### 1. Initialize Cloudflare D1 Database
 
-Create a D1 database instance using the Wrangler CLI:
+Log in to Cloudflare and create your D1 database:
 ```bash
 bunx wrangler login
 bunx wrangler d1 create learn-tracker-db
@@ -81,7 +91,7 @@ bunx wrangler d1 create learn-tracker-db
 
 ### 2. Configure `wrangler.toml`
 
-Update the `database_id` in `wrangler.toml` with the ID generated from step 1:
+Update `wrangler.toml` with the generated `database_id`:
 ```toml
 name = "learn-tracker"
 pages_build_output_dir = ".svelte-kit/cloudflare"
@@ -96,23 +106,23 @@ database_id = "<YOUR_DATABASE_ID>"
 
 ### 3. Apply Remote Database Schema
 
-Run the migration script on your remote D1 instance:
+Run the database migration on your remote D1 instance:
 ```bash
 bunx wrangler d1 execute learn-tracker-db --remote --file=drizzle/0000_schema.sql
 ```
 
-### 4. Build and Deploy to Cloudflare Pages
+### 4. Build and Deploy
 
 ```bash
 bun run build
 bunx wrangler pages deploy .svelte-kit/cloudflare --project-name learn-dev-tracker
 ```
 
-### 5. Set Auth Secret (Optional)
+### 5. Configure Authentication Secret (Optional)
 
-In the Cloudflare Dashboard:
+In your Cloudflare Dashboard:
 1. Navigate to **Workers & Pages** > **learn-dev-tracker** > **Settings** > **Environment Variables**.
-2. Add an optional secret for token signing:
+2. Add a custom signing secret:
    - **Name**: `AUTH_SECRET`
    - **Value**: `<your-random-strong-secret>`
 
@@ -121,32 +131,33 @@ In the Cloudflare Dashboard:
 ## Project Structure
 
 ```
-├── drizzle/                     # Database migrations & SQL schema
+├── drizzle/                     # D1 SQL schemas & migrations
 ├── src/
-│   ├── app.css                  # Tailwind v4 configuration & theme tokens
-│   ├── app.html                 # Base HTML shell with theme initialization script
-│   ├── hooks.server.ts          # Multi-user session verification & route guards
+│   ├── app.css                  # Tailwind CSS v4 setup & neo-brutalist theme tokens
+│   ├── app.html                 # HTML shell and client-side setup
+│   ├── hooks.server.ts          # Session authentication & route protection guards
 │   ├── lib/
-│   │   ├── components/          # Reusable components (CustomSelect, ConfirmModal)
+│   │   ├── components/          # Reusable UI components (CustomSelect, ConfirmModal)
 │   │   ├── server/
-│   │   │   ├── auth.ts          # Web Crypto PBKDF2 hashing & HMAC session tokens
-│   │   │   └── db/              # Drizzle schema definitions & D1 connection
-│   │   └── utils/               # Markdown renderer & syntax highlighting setup
+│   │   │   ├── auth.ts          # PBKDF2 password hashing & HMAC-SHA256 session handling
+│   │   │   └── db/              # Drizzle ORM schema & D1 client initialization
+│   │   └── utils/               # Markdown renderer & syntax highlighting
 │   └── routes/
-│       ├── +layout.svelte       # Main layout, user profile badge & navigation header
-│       ├── login/               # Email/password login page
-│       ├── register/            # New user registration page
+│       ├── +layout.svelte       # Main layout with header navigation & profile state
+│       ├── login/               # User login page
+│       ├── register/            # New user account registration
 │       ├── logout/              # Sign-out server endpoint
-│       ├── materials/           # User-scoped learning topics & list view
-│       │   └── [id]/            # Markdown notes editor & viewer
-│       ├── projects/            # User-scoped practice projects tracker
-│       └── kanban/              # User-scoped drag-and-drop Kanban board
-├── static/                      # Static assets & favicon
-└── wrangler.toml                # Cloudflare deployment & D1 binding configuration
+│       ├── materials/           # Learning topics list & topic management modals
+│       │   └── [id]/            # Dual-pane Markdown notes editor & reader
+│       ├── projects/            # Practice projects portfolio tracker
+│       └── kanban/              # Drag-and-drop Kanban workflow board
+├── static/                      # Static assets & icons
+├── wrangler.toml                # Cloudflare Pages & D1 binding configuration
+└── LICENSE                      # MIT License
 ```
 
 ---
 
 ## License
 
-MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
